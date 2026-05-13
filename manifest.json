@@ -1,0 +1,38 @@
+{
+  "name": "Parfumerie des Princes",
+  "short_name": "Parfumerie DP",
+  "description": "Boutique de parfums, sacs, chaînes et porte-monnaie haut de gamme — Bouaké, Côte d'Ivoire",
+  "start_url": "https://parfumerie-des-princes.vercel.app/",
+  "scope": "https://parfumerie-des-princes.vercel.app/",
+  "display": "standalone",
+  "orientation": "portrait",
+  "background_color": "#1a2744",
+  "theme_color": "#1a2744",
+  "lang": "fr",
+  "icons": [
+    {
+      "src": "https://lh3.googleusercontent.com/d/11jAOWFMQM8Taf1GkFTv2fabKmadm5l5N",
+      "sizes": "192x192",
+      "type": "image/jpeg",
+      "purpose": "any maskable"
+    },
+    {
+      "src": "https://lh3.googleusercontent.com/d/11jAOWFMQM8Taf1GkFTv2fabKmadm5l5N",
+      "sizes": "512x512",
+      "type": "image/jpeg",
+      "purpose": "any maskable"
+    }
+  ],
+  "categories": [
+    "shopping",
+    "lifestyle"
+  ],
+  "screenshots": [
+    {
+      "src": "https://lh3.googleusercontent.com/d/11jAOWFMQM8Taf1GkFTv2fabKmadm5l5N",
+      "sizes": "390x844",
+      "type": "image/jpeg",
+      "form_factor": "narrow"
+    }
+  ]
+}
