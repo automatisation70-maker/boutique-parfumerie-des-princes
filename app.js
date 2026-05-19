@@ -296,8 +296,52 @@ function openModal(id) {
   const isFav = favs.some(f => f.id === id);
   const btn = document.getElementById('modalFav');
   btn.textContent = isFav ? '♥' : '♡'; btn.className = 'modal-fav' + (isFav ? ' liked' : '');
+
+  // ── Carousel de variantes ─────────────────────────────
+  renderVariants(p);
+
   document.getElementById('modalOverlay').classList.add('open');
   document.body.style.overflow = 'hidden';
+}
+
+function renderVariants(p) {
+  const container = document.getElementById('modalVariants');
+  if (!container) return;
+
+  // Trouver les variantes : même groupe non vide, ou même nom de base
+  let variants = [];
+  if (p.groupe) {
+    variants = PRODUCTS.filter(x => x.groupe && x.groupe === p.groupe);
+  }
+  // Fallback : même nom (sans tenir compte de la casse)
+  if (variants.length <= 1) {
+    const baseName = p.name.toLowerCase().replace(/\s*(noir|blanc|rose|or|doré|bleu|rouge|vert|beige|gris|silver|gold|black|white|pink)\s*/gi, '').trim();
+    if (baseName.length > 3) {
+      variants = PRODUCTS.filter(x => {
+        const xBase = x.name.toLowerCase().replace(/\s*(noir|blanc|rose|or|doré|bleu|rouge|vert|beige|gris|silver|gold|black|white|pink)\s*/gi, '').trim();
+        return xBase === baseName;
+      });
+    }
+  }
+
+  // Masquer si une seule variante (= pas de groupe)
+  if (variants.length <= 1) {
+    container.style.display = 'none';
+    return;
+  }
+
+  container.style.display = 'block';
+  container.innerHTML = `
+    <div class="variants-label">Autres coloris</div>
+    <div class="variants-scroll">
+      ${variants.map(v => `
+        <div class="variant-thumb ${v.id === p.id ? 'active' : ''}" onclick="openModal('${v.id}')" title="${v.couleur || v.name}">
+          ${v.image
+            ? `<img src="${v.image}" onerror="this.style.display='none'" />`
+            : `<span>${v.emoji}</span>`}
+          ${v.couleur ? `<div class="variant-label">${v.couleur}</div>` : ''}
+        </div>`).join('')}
+    </div>`;
 }
 
 function closeModalBtn() {

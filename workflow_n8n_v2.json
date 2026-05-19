@@ -1,0 +1,538 @@
+{
+  "nodes": [
+    {
+      "parameters": {
+        "httpMethod": "POST",
+        "path": "removebg-batch",
+        "responseMode": "responseNode",
+        "options": {}
+      },
+      "id": "20afd488-32c1-4599-aa10-8195414738e7",
+      "name": "Recevoir image produit",
+      "type": "n8n-nodes-base.webhook",
+      "typeVersion": 2.1,
+      "position": [
+        448,
+        64
+      ],
+      "webhookId": "d53deb44-b3e3-48b1-885c-f0a64575d20e"
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "https://api.cloudinary.com/v1_1/dsic469m2/image/upload",
+        "authentication": "genericCredentialType",
+        "genericAuthType": "httpBasicAuth",
+        "sendBody": true,
+        "contentType": "form-urlencoded",
+        "bodyParameters": {
+          "parameters": [
+            {
+              "name": "file",
+              "value": "={{ \"data:\" + $(\"Recevoir image produit\").item.json.body.image_mimetype + \";base64,\" + $(\"Recevoir image produit\").item.json.body.image_base64 }}"
+            },
+            {
+              "name": "folder",
+              "value": "parfumerie"
+            },
+            {
+              "name": "eager",
+              "value": "e_trim:10,c_pad,b_white,w_800,h_800,g_center"
+            },
+            {
+              "name": "eager_async",
+              "value": "false"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "id": "a615e47a-f83b-4e18-a88a-7e5494cf0a09",
+      "name": "Ameliorer image Cloudinary",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.4,
+      "position": [
+        688,
+        64
+      ],
+      "credentials": {
+        "httpBasicAuth": {
+          "id": "4hDMYE1a1fdg63zI",
+          "name": "Cloudinary-api-brico524@gmail.com"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "url": "={{ $json.eager && $json.eager[0] ? $json.eager[0].secure_url : $json.secure_url }}",
+        "options": {
+          "response": {
+            "response": {
+              "responseFormat": "file"
+            }
+          }
+        }
+      },
+      "id": "7111b66b-6f86-43e9-aefe-1fb796aed8ff",
+      "name": "Telecharger image Cloudinary",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.4,
+      "position": [
+        928,
+        64
+      ]
+    },
+    {
+      "parameters": {
+        "name": "={{ $(\"Recevoir image produit\").item.json.body.filename }}",
+        "driveId": {
+          "__rl": true,
+          "mode": "list",
+          "value": "My Drive"
+        },
+        "folderId": {
+          "__rl": true,
+          "mode": "id",
+          "value": "19dBcxpJD2-XFEF3o_ziHhGxaglauTHHx"
+        },
+        "options": {
+          "simplifyOutput": false
+        }
+      },
+      "id": "fd70255c-6b30-44b5-b8fd-003047da8506",
+      "name": "Upload Google Drive",
+      "type": "n8n-nodes-base.googleDrive",
+      "typeVersion": 3,
+      "position": [
+        1168,
+        64
+      ],
+      "credentials": {
+        "googleDriveOAuth2Api": {
+          "id": "4h6Tw9Cz50JCWEwB",
+          "name": "Google Drive account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "operation": "share",
+        "fileId": {
+          "__rl": true,
+          "mode": "id",
+          "value": "={{ $json.id }}"
+        },
+        "permissionsUi": {
+          "permissionsValues": {
+            "role": "reader",
+            "type": "anyone"
+          }
+        },
+        "options": {}
+      },
+      "id": "43222c36-b535-4fa6-94d5-4e0582fb1617",
+      "name": "Rendre public",
+      "type": "n8n-nodes-base.googleDrive",
+      "typeVersion": 3,
+      "position": [
+        1408,
+        64
+      ],
+      "credentials": {
+        "googleDriveOAuth2Api": {
+          "id": "4h6Tw9Cz50JCWEwB",
+          "name": "Google Drive account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "method": "DELETE",
+        "url": "https://api.cloudinary.com/v1_1/dsic469m2/image/destroy",
+        "authentication": "genericCredentialType",
+        "genericAuthType": "httpBasicAuth",
+        "sendBody": true,
+        "contentType": "form-urlencoded",
+        "bodyParameters": {
+          "parameters": [
+            {
+              "name": "public_id",
+              "value": "={{ $(\"Ameliorer image Cloudinary\").item.json.public_id }}"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "id": "4f823d73-7606-4c09-8f59-f15c6e23f850",
+      "name": "Supprimer de Cloudinary",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.4,
+      "position": [
+        1648,
+        64
+      ],
+      "credentials": {
+        "httpBasicAuth": {
+          "id": "4hDMYE1a1fdg63zI",
+          "name": "Cloudinary-api-brico524@gmail.com"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "assignments": {
+          "assignments": [
+            {
+              "id": "b04ac618",
+              "name": "ID_Produit",
+              "value": "={{ $(\"Recevoir image produit\").item.json.body.id_produit }}",
+              "type": "string"
+            },
+            {
+              "id": "6db823b7",
+              "name": "Nom_Produit",
+              "value": "={{ $(\"Recevoir image produit\").item.json.body.nom_produit }}",
+              "type": "string"
+            },
+            {
+              "id": "78368dbe",
+              "name": "Categorie",
+              "value": "={{ $(\"Recevoir image produit\").item.json.body.categorie }}",
+              "type": "string"
+            },
+            {
+              "id": "1ca93cf7",
+              "name": "Prix_FCFA",
+              "value": "={{ $(\"Recevoir image produit\").item.json.body.prix }}",
+              "type": "number"
+            },
+            {
+              "id": "7b417e1a",
+              "name": "Description",
+              "value": "={{ $(\"Recevoir image produit\").item.json.body.description }}",
+              "type": "string"
+            },
+            {
+              "id": "311af7b9",
+              "name": "Image_Drive_ID",
+              "value": "={{ $(\"Upload Google Drive\").item.json.id }}",
+              "type": "string"
+            },
+            {
+              "id": "176655c9",
+              "name": "URL_Image",
+              "value": "={{ \"https://drive.google.com/uc?id=\" + $(\"Upload Google Drive\").item.json.id }}",
+              "type": "string"
+            },
+            {
+              "id": "d23adb17",
+              "name": "Date_Ajout",
+              "value": "={{ $now.toISO() }}",
+              "type": "string"
+            },
+            {
+              "id": "d3dd5c8d",
+              "name": "Badge",
+              "value": "={{ $(\"Recevoir image produit\").item.json.body.badge }}",
+              "type": "string"
+            },
+            {
+              "id": "fa9afe8b",
+              "name": "Statut",
+              "value": "actif",
+              "type": "string"
+            },
+            {
+              "id": "aa001122",
+              "name": "Groupe",
+              "value": "={{ $(\"Recevoir image produit\").item.json.body.groupe }}",
+              "type": "string"
+            },
+            {
+              "id": "bb334455",
+              "name": "Couleur",
+              "value": "={{ $(\"Recevoir image produit\").item.json.body.couleur }}",
+              "type": "string"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "id": "44e844f3-a153-482e-ad69-d6dc00c2b345",
+      "name": "Preparer pour Sheet",
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.4,
+      "position": [
+        1888,
+        64
+      ]
+    },
+    {
+      "parameters": {
+        "operation": "append",
+        "documentId": {
+          "__rl": true,
+          "mode": "id",
+          "value": "1Bz4AJLrzY-e49SD8H4grbdquRizt4pHN65xjNJwavEs"
+        },
+        "sheetName": {
+          "__rl": true,
+          "mode": "name",
+          "value": "Produits"
+        },
+        "columns": {
+          "mappingMode": "defineBelow",
+          "value": {
+            "ID_Produit": "={{ $json.ID_Produit }}",
+            "Nom_Produit": "={{ $json.Nom_Produit }}",
+            "Categorie": "={{ $json.Categorie }}",
+            "Prix_FCFA": "={{ $json.Prix_FCFA }}",
+            "Description": "={{ $json.Description }}",
+            "Image_Drive_ID": "={{ $json.Image_Drive_ID }}",
+            "URL_Image": "={{ $json.URL_Image }}",
+            "Date_Ajout": "={{ $json.Date_Ajout }}",
+            "Badge": "={{ $json.Badge }}",
+            "Statut": "={{ $json.Statut }}",
+            "Groupe": "={{ $json.Groupe }}",
+            "Couleur": "={{ $json.Couleur }}"
+          },
+          "matchingColumns": [],
+          "schema": [
+            {
+              "id": "ID_Produit",
+              "displayName": "ID_Produit",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "Nom_Produit",
+              "displayName": "Nom_Produit",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "Categorie",
+              "displayName": "Categorie",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "Prix_FCFA",
+              "displayName": "Prix_FCFA",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "Description",
+              "displayName": "Description",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "Image_Drive_ID",
+              "displayName": "Image_Drive_ID",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "URL_Image",
+              "displayName": "URL_Image",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "Date_Ajout",
+              "displayName": "Date_Ajout",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "Badge",
+              "displayName": "Badge",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "Statut",
+              "displayName": "Statut",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "Groupe",
+              "displayName": "Groupe",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "Couleur",
+              "displayName": "Couleur",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            }
+          ],
+          "attemptToConvertTypes": false,
+          "convertFieldsToString": false
+        },
+        "options": {}
+      },
+      "id": "d630134e-655e-4152-8fb5-ed8a22fe7e2a",
+      "name": "Ajouter dans Google Sheets",
+      "type": "n8n-nodes-base.googleSheets",
+      "typeVersion": 4.7,
+      "position": [
+        2128,
+        64
+      ],
+      "credentials": {
+        "googleSheetsOAuth2Api": {
+          "id": "SIiNWcwQLgrwlA3j",
+          "name": "Google Sheets account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "options": {}
+      },
+      "id": "8fe7a0e8-64e0-429d-90f8-103e02b0d947",
+      "name": "Reponse succes",
+      "type": "n8n-nodes-base.respondToWebhook",
+      "typeVersion": 1.5,
+      "position": [
+        2368,
+        64
+      ]
+    }
+  ],
+  "connections": {
+    "Recevoir image produit": {
+      "main": [
+        [
+          {
+            "node": "Ameliorer image Cloudinary",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Ameliorer image Cloudinary": {
+      "main": [
+        [
+          {
+            "node": "Telecharger image Cloudinary",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Telecharger image Cloudinary": {
+      "main": [
+        [
+          {
+            "node": "Upload Google Drive",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Upload Google Drive": {
+      "main": [
+        [
+          {
+            "node": "Rendre public",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Rendre public": {
+      "main": [
+        [
+          {
+            "node": "Supprimer de Cloudinary",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Supprimer de Cloudinary": {
+      "main": [
+        [
+          {
+            "node": "Preparer pour Sheet",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Preparer pour Sheet": {
+      "main": [
+        [
+          {
+            "node": "Ajouter dans Google Sheets",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Ajouter dans Google Sheets": {
+      "main": [
+        [
+          {
+            "node": "Reponse succes",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "pinData": {},
+  "meta": {
+    "instanceId": "11680c0f1600b5b4755d593a61384288df1ce894f0cb57dc45db381b43cecb0b"
+  }
+}

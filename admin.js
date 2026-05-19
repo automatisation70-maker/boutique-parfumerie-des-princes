@@ -112,6 +112,8 @@ async function loadAllProducts() {
         badge: g(8) || '',
         statut: g(9).toLowerCase() || 'actif',
         date: g(7),
+        groupe: g(10) || '',
+        couleur: g(11) || '',
         bg: {Parfum:'#f5f0ea',Sac:'#f7f0ec',Chaine:'#f4f0f8','Porte-monnaie':'#f0f5ea'}[cat] || '#f5f5f0',
         emoji: {Parfum:'🌹',Sac:'👜',Chaine:'📿','Porte-monnaie':'👛'}[cat] || '✨',
       };
@@ -452,48 +454,100 @@ function handlePhoto(input) {
   reader.readAsDataURL(file);
 }
 
+const AI_PROMPT = 'Analyse ce produit. Réponds UNIQUEMENT en JSON sans markdown, sans commentaire : {"categorie":"Parfum|Sac|Chaine|Porte-monnaie|Autre","nom":"nom élégant court","description":"description luxueuse 1-2 phrases","groupe":"NomBase sans couleur ex: YSL-MYSLF","couleur":"couleur principale ex: Noir"}';
+
+async function callGroq(key, model) {
+  const res = await fetch('https://api.groq.com/openai/v1/chat/completions', {
+    method: 'POST',
+    headers: { 'Authorization': `Bearer ${key}`, 'Content-Type': 'application/json' },
+    body: JSON.stringify({
+      model: model,
+      max_tokens: 400,
+      messages: [{ role: 'user', content: [
+        { type: 'text', text: AI_PROMPT },
+        { type: 'image_url', image_url: { url: `data:${photoMime};base64,${photoBase64}` } }
+      ]}]
+    })
+  });
+  const data = await res.json();
+  if (data.error) throw new Error(data.error.message || 'Groq error');
+  return data.choices?.[0]?.message?.content || '{}';
+}
+
+async function callGemini(key, model) {
+  const res = await fetch(`https://generativelanguage.googleapis.com/v1beta/models/${model}:generateContent?key=${key}`, {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({
+      contents: [{ parts: [
+        { text: AI_PROMPT },
+        { inline_data: { mime_type: photoMime, data: photoBase64 } }
+      ]}],
+      generationConfig: { maxOutputTokens: 400 }
+    })
+  });
+  const data = await res.json();
+  if (data.error) throw new Error(data.error.message || 'Gemini error');
+  return data.candidates?.[0]?.content?.parts?.[0]?.text || '{}';
+}
+
 async function analyzeWithAI() {
-  const groqKey = getGroqKey();
-
   setStep(1, 'loading');
+  const groqKey = getGroqKey();
+  const geminiKey = getGeminiKey();
 
-  if (!groqKey) {
+  if (!groqKey && !geminiKey) {
     setStep(1, 'error');
-    showToast('Clé Groq non configurée — remplissez manuellement', false);
+    showToast('Aucune clé IA configurée — remplissez manuellement', false);
+    document.getElementById('prodForm').style.display = 'flex';
+    return;
+  }
+
+  let text = null;
+  let usedProvider = '';
+
+  // Essai Groq en premier
+  if (groqKey) {
+    try {
+      text = await callGroq(groqKey, getGroqModel());
+      usedProvider = 'Groq';
+    } catch(e) {
+      console.warn('[IA] Groq échoué:', e.message, '— bascule sur Gemini');
+      showToast('Groq indisponible — bascule sur Gemini…', false);
+    }
+  }
+
+  // Fallback Gemini
+  if (!text && geminiKey) {
+    try {
+      text = await callGemini(geminiKey, getGeminiModel());
+      usedProvider = 'Gemini';
+    } catch(e) {
+      console.warn('[IA] Gemini échoué:', e.message);
+    }
+  }
+
+  if (!text) {
+    setStep(1, 'error');
+    showToast('Analyse IA échouée — remplissez manuellement', false);
     document.getElementById('prodForm').style.display = 'flex';
     return;
   }
 
   try {
-    const res = await fetch('https://api.groq.com/openai/v1/chat/completions', {
-      method: 'POST',
-      headers: { 'Authorization': `Bearer ${groqKey}`, 'Content-Type': 'application/json' },
-      body: JSON.stringify({
-        model: 'meta-llama/llama-4-scout-17b-16e-instruct',
-        max_tokens: 400,
-        messages: [{
-          role: 'user',
-          content: [
-            { type: 'text', text: 'Analyse ce produit. Réponds UNIQUEMENT en JSON sans markdown : {"categorie":"Parfum|Sac|Chaine|Porte-monnaie|Autre","nom":"nom élégant court","description":"description luxueuse 1-2 phrases"}' },
-            { type: 'image_url', image_url: { url: `data:${photoMime};base64,${photoBase64}` } }
-          ]
-        }]
-      })
-    });
-    const data = await res.json();
-    const text = data.choices?.[0]?.message?.content || '{}';
     const parsed = JSON.parse(text.replace(/```json|```/g,'').trim());
     if (parsed.categorie) document.getElementById('fCat').value = parsed.categorie;
     if (parsed.nom) document.getElementById('fNom').value = parsed.nom;
     if (parsed.description) document.getElementById('fDesc').value = parsed.description;
+    if (parsed.groupe) document.getElementById('fGroupe').value = parsed.groupe;
+    if (parsed.couleur) document.getElementById('fCouleur').value = parsed.couleur;
     setStep(1, 'done');
-    showToast('Analyse IA terminée — vérifiez et complétez');
+    showToast(`Analyse IA terminée via ${usedProvider} — vérifiez`);
   } catch {
     setStep(1, 'error');
-    showToast('Analyse IA échouée — remplissez manuellement', false);
+    showToast('Réponse IA invalide — remplissez manuellement', false);
   }
 
-  // Révéler les champs IA après l'analyse
   document.getElementById('prodForm').style.display = 'flex';
 }
 
@@ -529,6 +583,8 @@ async function submitProduct() {
         prix: parseFloat(prix),
         description: document.getElementById('fDesc').value,
         badge: document.getElementById('fBadge').value,
+        groupe: document.getElementById('fGroupe').value,
+        couleur: document.getElementById('fCouleur').value,
         filename, image_base64: photoBase64, image_mimetype: photoMime
       })
     });
@@ -578,7 +634,7 @@ function resetForm() {
   const btn = document.getElementById('submitBtn');
   btn.style.display = 'block'; btn.disabled = false;
   btn.textContent = 'Enregistrer →';
-  ['fPrix','fNom','fDesc'].forEach(id => document.getElementById(id).value = '');
+  ['fPrix','fNom','fDesc','fGroupe','fCouleur'].forEach(id => document.getElementById(id).value = '');
   document.getElementById('photoCamera').value = '';
   document.getElementById('photoGallery').value = '';
 }
@@ -637,6 +693,9 @@ function unlockApiSection() {
   document.getElementById('pWebhook').value = cfg('pdp_webhook');
   document.getElementById('pWebhookUpdate').value = cfg('pdp_webhook_update');
   document.getElementById('pGroq').value = cfg('pdp_groq_key');
+  document.getElementById('pGemini').value = cfg('pdp_gemini_key');
+  document.getElementById('pGroqModel').value = cfg('pdp_groq_model') || 'meta-llama/llama-4-scout-17b-16e-instruct';
+  document.getElementById('pGeminiModel').value = cfg('pdp_gemini_model') || 'gemini-2.0-flash';
   document.getElementById('pSheet').value = cfg('pdp_sheet_id');
 }
 
@@ -644,11 +703,17 @@ async function saveApiKeys() {
   const webhook = document.getElementById('pWebhook').value.trim();
   const webhookUpdate = document.getElementById('pWebhookUpdate').value.trim();
   const groq = document.getElementById('pGroq').value.trim();
+  const gemini = document.getElementById('pGemini').value.trim();
+  const groqModel = document.getElementById('pGroqModel').value.trim();
+  const geminiModel = document.getElementById('pGeminiModel').value.trim();
   const sheet = document.getElementById('pSheet').value.trim();
   const config = {};
   if (webhook) config.pdp_webhook = webhook;
   if (webhookUpdate) config.pdp_webhook_update = webhookUpdate;
   if (groq) config.pdp_groq_key = groq;
+  if (gemini) config.pdp_gemini_key = gemini;
+  if (groqModel) config.pdp_groq_model = groqModel;
+  if (geminiModel) config.pdp_gemini_model = geminiModel;
   if (sheet) config.pdp_sheet_id = sheet;
   if (Object.keys(config).length === 0) return;
   showToast('Sauvegarde en cours…');

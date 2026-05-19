@@ -6,6 +6,8 @@
 //             E=Description F=Image_Drive_ID G=URL_Image H=Date_Ajout
 //             I=Badge (NOUVEAU / PROMO / vide)
 //             J=Statut (actif / inactif — laisser vide = actif par défaut)
+//             K=Groupe (ex: YSL-MYSLF — relie variantes du même produit)
+//             L=Couleur (ex: Noir, Rose — couleur/variante)
 // ─────────────────────────────────────────────────────────
 
 const SHEET_ID = '1Bz4AJLrzY-e49SD8H4grbdquRizt4pHN65xjNJwavEs';
@@ -79,6 +81,8 @@ async function loadProducts() {
           image:  toDriveImageUrl(rawImageUrl, driveId),
           badge:  get(8) || '',
           statut: statut || 'actif',
+          groupe: get(10) || '',
+          couleur: get(11) || '',
           bg:     CAT_BG[cat] || '#f5f5f0',
           emoji:  CAT_EMOJI[cat] || '✨',
         };

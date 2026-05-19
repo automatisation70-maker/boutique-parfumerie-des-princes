@@ -14,6 +14,9 @@ const CONFIG_DEFAULTS = {
   pdp_webhook:        '',
   pdp_webhook_update: '',
   pdp_groq_key:       '',
+  pdp_gemini_key:     '',
+  pdp_groq_model:     'meta-llama/llama-4-scout-17b-16e-instruct',
+  pdp_gemini_model:   'gemini-2.5-flash',
   pdp_sheet_id:       '1Bz4AJLrzY-e49SD8H4grbdquRizt4pHN65xjNJwavEs',
   pdp_wa_number:      '2250700000000',
   pdp_shop_name:      'Parfumerie des Princes',
@@ -80,5 +83,8 @@ function getShopName() { return cfg('pdp_shop_name') || 'Parfumerie des Princes'
 function getShopAddr() { return cfg('pdp_shop_addr') || 'Quartier Kennedy, Feu Rouge, Bouaké'; }
 function getWebhook()  { return cfg('pdp_webhook'); }
 function getWebhookUpdate() { return cfg('pdp_webhook_update'); }
-function getGroqKey()  { return cfg('pdp_groq_key'); }
+function getGroqKey()    { return cfg('pdp_groq_key'); }
+function getGeminiKey()  { return cfg('pdp_gemini_key'); }
+function getGroqModel()  { return cfg('pdp_groq_model') || 'meta-llama/llama-4-scout-17b-16e-instruct'; }
+function getGeminiModel(){ return cfg('pdp_gemini_model') || 'gemini-2.0-flash'; }
 function getSheetId()  { return cfg('pdp_sheet_id') || '1Bz4AJLrzY-e49SD8H4grbdquRizt4pHN65xjNJwavEs'; }
