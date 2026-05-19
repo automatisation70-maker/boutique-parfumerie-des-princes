@@ -182,8 +182,8 @@ body { height: 100%; overflow: hidden; overscroll-behavior: none; font-family: v
 .modal-sheet { background: var(--white); border-radius: 22px 22px 0 0; width: 100%; max-width: 480px; max-height: 90vh; overflow-y: auto; animation: slideUp .25s ease; }
 @keyframes slideUp { from { transform: translateY(100%); } to { transform: translateY(0); } }
 .modal-handle { width: 36px; height: 4px; background: #ddd; border-radius: 2px; margin: 12px auto 0; }
-.modal-img-wrap { width: 100%; height: 240px; display: flex; align-items: center; justify-content: center; overflow: hidden; }
-.modal-img-wrap img { width: 100%; height: 100%; object-fit: cover; }
+.modal-img-wrap { width: 100%; height: 300px; display: flex; align-items: center; justify-content: center; overflow: hidden; }
+.modal-img-wrap img { width: 100%; height: 100%; object-fit: contain; background: #f5edd6; }
 .modal-img-emoji { font-size: 80px; }
 .modal-body { padding: 16px 18px 28px; }
 .modal-top { display: flex; align-items: flex-start; justify-content: space-between; margin-bottom: 10px; }
