@@ -183,7 +183,7 @@ body { height: 100%; overflow: hidden; overscroll-behavior: none; font-family: v
 @keyframes slideUp { from { transform: translateY(100%); } to { transform: translateY(0); } }
 .modal-handle { width: 36px; height: 4px; background: #ddd; border-radius: 2px; margin: 12px auto 0; }
 .modal-img-wrap { width: 100%; height: 240px; display: flex; align-items: center; justify-content: center; overflow: hidden; }
-.modal-img-wrap img { width: 100%; height: 100%; object-fit: cover; }
+.modal-img-wrap img { width: 100%; height: 100%; object-fit: contain; background: #f8f4ec; }
 .modal-img-emoji { font-size: 80px; }
 .modal-body { padding: 16px 18px 28px; }
 .modal-top { display: flex; align-items: flex-start; justify-content: space-between; margin-bottom: 10px; }
@@ -214,6 +214,6 @@ body { height: 100%; overflow: hidden; overscroll-behavior: none; font-family: v
 .variant-thumb { flex-shrink: 0; width: 58px; cursor: pointer; border-radius: 10px; overflow: hidden; border: 2px solid transparent; transition: border-color .15s, transform .15s; background: var(--cream); }
 .variant-thumb:active { transform: scale(.95); }
 .variant-thumb.active { border-color: var(--navy); }
-.variant-thumb img { width: 100%; aspect-ratio: 1/1; object-fit: cover; display: block; }
+.variant-thumb img { width: 100%; aspect-ratio: 1/1; object-fit: contain; display: block; background: var(--cream); }
 .variant-thumb span { display: flex; align-items: center; justify-content: center; width: 100%; aspect-ratio: 1/1; font-size: 22px; }
 .variant-label { font-size: 8px; text-align: center; color: var(--text-2); padding: 3px 2px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
