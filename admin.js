@@ -106,7 +106,7 @@ async function loadAllProducts() {
       const id = driveId || extractId(rawUrl);
       return {
         id: g(0), name: g(1), cat,
-        price: parseFloat(g(3)) || 0,
+        price: Math.round(parseFloat(g(3)) || 0),
         desc: g(4), driveId,
         image: id ? `https://lh3.googleusercontent.com/d/${id}` : null,
         badge: g(8) || '',
@@ -381,7 +381,7 @@ async function saveEditProduct() {
 
   const newName = document.getElementById('editNom').value.trim() || p.name;
   const newCat = document.getElementById('editCat').value;
-  const newPrice = parseFloat(document.getElementById('editPrix').value) || p.price;
+  const newPrice = Math.round(parseFloat(document.getElementById('editPrix').value) || p.price);
   const newDesc = document.getElementById('editDesc').value.trim();
   const newBadge = document.getElementById('editBadge').value;
   const newStatut = document.getElementById('editStatut').value;
@@ -580,7 +580,7 @@ async function submitProduct() {
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({
         id_produit: id, nom_produit: nom, categorie: cat,
-        prix: parseFloat(prix),
+        prix: Math.round(parseFloat(prix)),
         description: document.getElementById('fDesc').value,
         badge: document.getElementById('fBadge').value,
         groupe: document.getElementById('fGroupe').value,
