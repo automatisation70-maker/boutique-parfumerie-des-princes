@@ -183,10 +183,11 @@ body { height: 100%; overflow: hidden; overscroll-behavior: none; font-family: v
 /* Sheet : image en haut + bande blanche en bas */
 .modal-sheet { background: #fff; border-radius: 22px 22px 0 0; width: 100%; max-width: 480px; height: 92vh; overflow: hidden; animation: slideUp .25s ease; display: flex; flex-direction: column; }
 
-/* Zone image : prend ~58% de la hauteur */
-.modal-img-wrap { position: relative; width: 100%; flex: 0 0 58%; min-height: 0; overflow: hidden; background: #100d07; border-radius: 22px 22px 0 0; }
+/* Zone image : 65% de la hauteur du sheet */
+.modal-img-wrap { position: relative; width: 100%; flex: 0 0 65%; min-height: 0; overflow: hidden; background: #100d07; border-radius: 22px 22px 0 0; }
 .modal-img-wrap::before { content: ""; position: absolute; inset: -16px; background-image: var(--thumb-src); background-size: cover; background-position: center; filter: blur(22px) brightness(0.35) saturate(0.4); z-index: 0; }
-.modal-img-wrap > img { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: contain; object-position: center center; z-index: 1; }
+/* Image centrée avec padding pour ne pas coller les bords */
+.modal-img-wrap > img { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: contain; object-position: center center; padding: 16px 0 8px; box-sizing: border-box; z-index: 1; }
 
 /* Croix en overlay sur l'image, coin haut gauche */
 .modal-close-btn { position: absolute; top: 12px; left: 14px; z-index: 3; width: 32px; height: 32px; border-radius: 50%; background: rgba(0,0,0,.55); border: none; color: #fff; cursor: pointer; display: flex; align-items: center; justify-content: center; backdrop-filter: blur(4px); }
@@ -204,12 +205,12 @@ body { height: 100%; overflow: hidden; overscroll-behavior: none; font-family: v
 /* Textes infos */
 .modal-cat { font-size: 10px; color: var(--text-3); text-transform: uppercase; letter-spacing: .8px; margin-bottom: 3px; }
 .modal-name { font-family: var(--font-display); font-size: 20px; font-weight: 600; color: var(--text); font-style: italic; line-height: 1.2; }
-.modal-price { font-family: var(--font-mono); font-size: 18px; font-weight: 700; color: var(--navy); margin-top: 3px; }
+.modal-price { font-family: var(--font-mono); font-size: 18px; font-weight: 700; color: var(--gold); margin-top: 3px; }
 .modal-badge { background: var(--gold); color: var(--navy); font-size: 9px; font-weight: 700; padding: 3px 8px; border-radius: 8px; display: inline-block; margin-bottom: 5px; }
 
 /* Boutons WA + favori dans la bande blanche */
 .modal-share-overlay { width: 36px; height: 36px; border-radius: 50%; background: rgba(37,211,102,.12); border: 1.5px solid rgba(37,211,102,.7); color: #25d366; cursor: pointer; display: flex; align-items: center; justify-content: center; }
-.modal-fav-overlay { width: 36px; height: 36px; border-radius: 50%; border: 1.5px solid var(--border); background: var(--cream); color: var(--text-2); font-size: 17px; cursor: pointer; display: flex; align-items: center; justify-content: center; }
+.modal-fav-overlay { width: 36px; height: 36px; min-width: 36px; min-height: 36px; border-radius: 50%; border: 1.5px solid var(--border); background: var(--cream); color: var(--text-2); font-size: 17px; cursor: pointer; display: flex; align-items: center; justify-content: center; padding: 0; box-sizing: border-box; line-height: 1; }
 .modal-fav-overlay.liked { color: var(--red); border-color: #fcc; background: #fff0f0; }
 
 /* Description */
