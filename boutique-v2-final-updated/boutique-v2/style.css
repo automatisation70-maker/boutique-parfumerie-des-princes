@@ -295,3 +295,5 @@ body { height: 100%; overflow: hidden; overscroll-behavior: none; font-family: v
 }
 .variant-thumb span { display: flex; align-items: center; justify-content: center; width: 100%; aspect-ratio: 1/1; font-size: 22px; position: relative; z-index: 1; }
 .variant-label { font-size: 8px; text-align: center; color: var(--text-2); padding: 3px 2px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+/ *   c a c h e   b u s t   0 5 / 2 0 / 2 0 2 6   0 2 : 0 0 : 3 2   * /  
+ 
