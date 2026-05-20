@@ -1,4 +1,4 @@
-*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+﻿*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
 :root {
   --navy: #1a2744; --navy-2: #243560; --navy-3: #0f1a2e;
   --gold: #c8a84b; --gold-2: #e8c96a; --gold-light: #f5edd6;
@@ -179,28 +179,44 @@ body { height: 100%; overflow: hidden; overscroll-behavior: none; font-family: v
 /* ── Modal produit ── */
 .modal-overlay { position: fixed; inset: 0; background: rgba(10,16,35,.6); z-index: 400; display: none; align-items: flex-end; justify-content: center; }
 .modal-overlay.open { display: flex; }
-.modal-sheet { background: var(--white); border-radius: 22px 22px 0 0; width: 100%; max-width: 480px; max-height: 90vh; overflow-y: auto; animation: slideUp .25s ease; }
-@keyframes slideUp { from { transform: translateY(100%); } to { transform: translateY(0); } }
-.modal-handle { width: 36px; height: 4px; background: #ddd; border-radius: 2px; margin: 12px auto 0; }
-.modal-img-wrap { width: 100%; height: 240px; display: flex; align-items: center; justify-content: center; overflow: hidden; }
-.modal-img-wrap img { width: 100%; height: 100%; object-fit: contain; background: #f8f4ec; }
+/* ── Modal image flush top, arrondie, croix en overlay ── */
+.modal-sheet { background: var(--white); border-radius: 22px 22px 0 0; width: 100%; max-width: 480px; max-height: 92vh; overflow-y: auto; animation: slideUp .25s ease; display: flex; flex-direction: column; }
+.modal-img-wrap { position: relative; width: 100%; height: 62vw; max-height: 320px; min-height: 220px; overflow: hidden; background: #100d07; flex-shrink: 0; border-radius: 22px 22px 0 0; }
+.modal-img-wrap::before { content: ""; position: absolute; inset: -16px; background-image: var(--thumb-src); background-size: cover; background-position: center; filter: blur(22px) brightness(0.35) saturate(0.4); z-index: 0; }
+.modal-img-wrap > img { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: contain; padding: 8px 8px 80px; box-sizing: border-box; z-index: 1; filter: drop-shadow(0 8px 28px rgba(0,0,0,.5)); }
+.modal-img-overlay { position: absolute; inset: 0; z-index: 2; display: flex; flex-direction: column; justify-content: space-between; pointer-events: none; }
+/* Croix directement sur l'image, collée en haut à gauche */
+.modal-img-overlay-top { display: flex; align-items: center; justify-content: flex-start; padding: 10px 12px 0; pointer-events: all; }
+.modal-img-overlay-bottom { background: linear-gradient(to top, rgba(8,12,28,.95) 0%, rgba(8,12,28,.65) 60%, transparent 100%); padding: 24px 14px 14px; pointer-events: all; }
+.modal-close-btn { width: 32px; height: 32px; border-radius: 50%; background: rgba(0,0,0,.55); border: none; color: #fff; cursor: pointer; display: flex; align-items: center; justify-content: center; backdrop-filter: blur(4px); }
+.modal-share-overlay { width: 34px; height: 34px; border-radius: 50%; background: rgba(37,211,102,.25); border: 1px solid rgba(37,211,102,.6); color: #25d366; cursor: pointer; display: flex; align-items: center; justify-content: center; }
+.modal-fav-overlay { width: 34px; height: 34px; border-radius: 50%; background: rgba(0,0,0,.4); border: 1px solid rgba(255,255,255,.2); color: #fff; font-size: 16px; cursor: pointer; display: flex; align-items: center; justify-content: center; }
+.modal-fav-overlay.liked { color: var(--red); border-color: rgba(224,87,78,.5); background: rgba(224,87,78,.15); }
+/* Bas de l'image : catégorie + nom/prix + boutons WA/fav */
+.modal-img-overlay-bottom .modal-cat { color: rgba(200,168,75,.9); font-size: 9px; text-transform: uppercase; letter-spacing: 1.2px; margin-bottom: 4px; }
+.modal-img-overlay-bottom .modal-name { font-family: var(--font-display); font-size: 20px; font-weight: 600; color: #fff; font-style: italic; line-height: 1.2; }
+.modal-img-overlay-bottom .modal-price { font-family: var(--font-mono); font-size: 17px; font-weight: 700; color: var(--gold); margin-top: 2px; }
+.modal-img-overlay-bottom .modal-badge { background: var(--gold); color: var(--navy); font-size: 8px; font-weight: 700; padding: 3px 8px; border-radius: 8px; display: inline-block; margin-bottom: 5px; }
+/* Ligne nom+prix à gauche / boutons WA+fav à droite */
+.modal-overlay-row { display: flex; align-items: flex-end; justify-content: space-between; gap: 8px; margin-top: 4px; }
+.modal-overlay-actions { display: flex; gap: 8px; align-items: center; flex-shrink: 0; }
 .modal-img-emoji { font-size: 80px; }
-.modal-body { padding: 16px 18px 28px; }
-.modal-top { display: flex; align-items: flex-start; justify-content: space-between; margin-bottom: 10px; }
+/* Corps sous l'image */
+.modal-body { padding: 14px 16px 28px; }
+.modal-top { display: flex; align-items: flex-start; justify-content: space-between; margin-bottom: 8px; }
 .modal-cat { font-size: 10px; color: var(--text-3); text-transform: uppercase; letter-spacing: .8px; margin-bottom: 4px; }
 .modal-name { font-family: var(--font-display); font-size: 22px; font-weight: 600; color: var(--text); font-style: italic; line-height: 1.2; }
 .modal-badge { background: var(--gold); color: var(--navy); font-size: 9px; font-weight: 700; padding: 4px 10px; border-radius: 10px; flex-shrink: 0; margin-top: 4px; }
-.modal-price-row { display: flex; align-items: center; justify-content: space-between; margin-bottom: 14px; }
+.modal-price-row { display: flex; align-items: center; justify-content: space-between; margin-bottom: 12px; }
 .modal-price { font-family: var(--font-mono); font-size: 22px; font-weight: 700; color: var(--navy); }
 .modal-share { width: 38px; height: 38px; border-radius: 50%; border: 1.5px solid #25d366; background: #f0fff4; color: #25d366; cursor: pointer; display: flex; align-items: center; justify-content: center; }
 .modal-fav { width: 38px; height: 38px; border-radius: 50%; border: 1.5px solid var(--border); background: var(--cream); font-size: 18px; cursor: pointer; display: flex; align-items: center; justify-content: center; }
 .modal-fav.liked { color: var(--red); border-color: #fcc; background: #fff0f0; }
-.modal-desc { font-size: 13px; color: var(--text-2); line-height: 1.7; margin-bottom: 16px; padding-bottom: 16px; border-bottom: 1px solid var(--border); }
-
-/* Boutons modal — Add panier + Retour côte à côte */
-.modal-btns { display: flex; gap: 10px; }
-.modal-back-btn { padding: 14px 16px; background: var(--cream); color: var(--text-2); border: 1px solid var(--border); border-radius: 14px; font-family: var(--font-body); font-size: 13px; cursor: pointer; display: flex; align-items: center; gap: 6px; white-space: nowrap; }
-.modal-add-btn { flex: 1; padding: 14px; background: var(--navy); color: #fff; border: none; border-radius: 14px; font-family: var(--font-body); font-size: 14px; font-weight: 600; cursor: pointer; display: flex; align-items: center; justify-content: center; gap: 8px; }
+.modal-desc { font-size: 13px; color: var(--text-2); line-height: 1.7; margin-bottom: 16px; padding-bottom: 14px; border-bottom: 1px solid var(--border); }
+/* Bouton Ajouter au panier centré, large, en bas */
+.modal-btns { display: flex; justify-content: center; padding-top: 4px; }
+.modal-back-btn { display: none; }
+.modal-add-btn { width: 65%; padding: 15px; background: var(--navy); color: #fff; border: none; border-radius: 16px; font-family: var(--font-body); font-size: 14px; font-weight: 600; cursor: pointer; display: flex; align-items: center; justify-content: center; gap: 8px; box-shadow: 0 4px 16px rgba(8,12,28,.25); }
 
 @media (min-width: 480px) {
   .app { border-left: 1px solid var(--border); border-right: 1px solid var(--border); }
@@ -217,3 +233,11 @@ body { height: 100%; overflow: hidden; overscroll-behavior: none; font-family: v
 .variant-thumb img { width: 100%; aspect-ratio: 1/1; object-fit: contain; display: block; background: var(--cream); }
 .variant-thumb span { display: flex; align-items: center; justify-content: center; width: 100%; aspect-ratio: 1/1; font-size: 22px; }
 .variant-label { font-size: 8px; text-align: center; color: var(--text-2); padding: 3px 2px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+
+
+/* ── Flèches navigation variantes ── */
+.modal-nav-prev, .modal-nav-next { position: absolute; top: 50%; transform: translateY(-50%); z-index: 3; background: rgba(0,0,0,.45); border: none; color: #fff; width: 36px; height: 36px; border-radius: 50%; cursor: pointer; display: none; align-items: center; justify-content: center; }
+.modal-nav-prev { left: 10px; }
+.modal-nav-next { right: 10px; }
+.modal-nav-prev.visible, .modal-nav-next.visible { display: flex; }
+.modal-overlay-row { display: flex; align-items: flex-end; justify-content: space-between; gap: 10px; }

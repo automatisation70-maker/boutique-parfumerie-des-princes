@@ -1,4 +1,4 @@
-// app.js v8 — Parfumerie des Princes
+﻿// app.js v8 — Parfumerie des Princes
 
 let cart = [];
 let favs = JSON.parse(localStorage.getItem('pdp_favs') || '[]');
@@ -285,8 +285,25 @@ function openModal(id) {
   const p = PRODUCTS.find(x => x.id === id); if (!p) return;
   currentModalId = id;
   const wrap = document.getElementById('modalImgWrap');
-  wrap.style.background = p.bg;
-  wrap.innerHTML = p.image ? `<img src="${p.image}" onerror="this.outerHTML='<div class=modal-img-emoji>${p.emoji}</div>'" />` : `<div class="modal-img-emoji">${p.emoji}</div>`;
+  if (p.image) {
+    wrap.style.setProperty('--thumb-src', `url('${p.image}')`);
+    wrap.style.removeProperty('background');
+  } else {
+    wrap.style.removeProperty('--thumb-src');
+    wrap.style.background = p.bg || "";
+  }
+  let imgEl = wrap.querySelector('img, .modal-img-emoji');
+  if (imgEl) imgEl.remove();
+  if (p.image) {
+    const img = document.createElement('img');
+    img.src = p.image;
+    img.onerror = () => { const em = document.createElement('div'); em.className = 'modal-img-emoji'; em.textContent = p.emoji; img.replaceWith(em); };
+    wrap.insertBefore(img, wrap.firstChild);
+  } else {
+    const em = document.createElement('div');
+    em.className = 'modal-img-emoji'; em.textContent = p.emoji;
+    wrap.insertBefore(em, wrap.firstChild);
+  }
   document.getElementById('modalCat').textContent = p.cat;
   document.getElementById('modalName').textContent = p.name;
   document.getElementById('modalPrice').textContent = fmt(p.price) + ' FCFA';
@@ -299,12 +316,14 @@ function openModal(id) {
 
   // ── Carousel de variantes ─────────────────────────────
   renderVariants(p);
+  updateNavArrows();
 
   document.getElementById('modalOverlay').classList.add('open');
   document.body.style.overflow = 'hidden';
 }
 
 function renderVariants(p) {
+  updateNavArrows();
   const container = document.getElementById('modalVariants');
   if (!container) return;
 
@@ -326,6 +345,7 @@ function renderVariants(p) {
 
   // Masquer si une seule variante (= pas de groupe)
   if (variants.length <= 1) {
+  currentVariants = [];
     container.style.display = 'none';
     return;
   }
@@ -334,6 +354,7 @@ function renderVariants(p) {
   container.innerHTML = `
     <div class="variants-label">Autres coloris</div>
     <div class="variants-scroll">
+  currentVariants = variants;
       ${variants.map(v => `
         <div class="variant-thumb ${v.id === p.id ? 'active' : ''}" onclick="openModal('${v.id}')" title="${v.couleur || v.name}">
           ${v.image
@@ -414,3 +435,19 @@ document.addEventListener('DOMContentLoaded', async () => {
   initHeaderScroll();
   initTripleTap();
 });
+
+// ── Navigation variantes par flèches ──────────────────────
+let currentVariants = [];
+function updateNavArrows() {
+  const prev = document.getElementById('modalNavPrev');
+  const next = document.getElementById('modalNavNext');
+  if (!prev || !next) return;
+  const idx = currentVariants.findIndex(v => v.id === currentModalId);
+  prev.className = 'modal-nav-prev' + (idx > 0 ? ' visible' : '');
+  next.className = 'modal-nav-next' + (idx < currentVariants.length - 1 ? ' visible' : '');
+}
+function navigateVariant(dir) {
+  const idx = currentVariants.findIndex(v => v.id === currentModalId);
+  const next = currentVariants[idx + dir];
+  if (next) openModal(next.id);
+}
