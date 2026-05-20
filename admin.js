@@ -736,3 +736,18 @@ document.addEventListener('DOMContentLoaded', () => {
   document.getElementById('lockInput').addEventListener('keydown', e => { if (e.key === 'Enter') tryUnlock(); });
   document.getElementById('adminCodeInput') && document.getElementById('adminCodeInput').addEventListener('keydown', e => { if (e.key === 'Enter') tryUnlock(); });
 });
+document.addEventListener('DOMContentLoaded', () => {
+  if (!getAdminCode()) {
+    document.getElementById('lockSub').textContent = 'Première connexion — choisissez votre code d\'accès admin';
+  }
+  document.getElementById('lockInput').addEventListener('keydown', e => { if (e.key === 'Enter') tryUnlock(); });
+  document.getElementById('adminCodeInput') && document.getElementById('adminCodeInput').addEventListener('keydown', e => { if (e.key === 'Enter') tryUnlock(); });
+
+  // Bloquer les touches ↑↓ sur les champs prix
+  ['fPrix', 'editPrix'].forEach(id => {
+    const el = document.getElementById(id);
+    if (el) el.addEventListener('keydown', e => {
+      if (e.key === 'ArrowUp' || e.key === 'ArrowDown') e.preventDefault();
+    });
+  });
+});
