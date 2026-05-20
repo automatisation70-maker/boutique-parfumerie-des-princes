@@ -297,7 +297,7 @@ function openModal(id) {
   if (p.image) {
     const img = document.createElement('img');
     img.src = p.image;
-    img.style.cssText = 'position:absolute;inset:0;width:100%;height:100%;object-fit:cover;object-position:center top;z-index:1;';
+    img.style.cssText = 'position:absolute;inset:0;width:100%;height:100%;object-fit:contain;object-position:center center;z-index:1;';
     img.onerror = () => { const em = document.createElement('div'); em.className = 'modal-img-emoji'; em.textContent = p.emoji; img.replaceWith(em); };
     wrap.insertBefore(img, wrap.firstChild);
   } else {

@@ -183,7 +183,7 @@ body { height: 100%; overflow: hidden; overscroll-behavior: none; font-family: v
 .modal-sheet { background: #100d07; border-radius: 22px 22px 0 0; width: 100%; max-width: 480px; height: 92vh; overflow: hidden; animation: slideUp .25s ease; display: flex; flex-direction: column; }
 .modal-img-wrap { position: relative; width: 100%; flex: 1; min-height: 0; overflow: hidden; background: #100d07; border-radius: 22px 22px 0 0; }
 .modal-img-wrap::before { content: ""; position: absolute; inset: -16px; background-image: var(--thumb-src); background-size: cover; background-position: center; filter: blur(22px) brightness(0.35) saturate(0.4); z-index: 0; }
-.modal-img-wrap > img { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; object-position: center top; padding: 0; box-sizing: border-box; z-index: 1; }
+.modal-img-wrap > img { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: contain; object-position: center center; padding: 0; box-sizing: border-box; z-index: 1; }
 .modal-img-overlay { position: absolute; inset: 0; z-index: 2; display: flex; flex-direction: column; justify-content: space-between; pointer-events: none; }
 /* Croix directement sur l'image, collée en haut à gauche */
 .modal-img-overlay-top { display: flex; align-items: center; justify-content: space-between; padding: 12px 14px 0; pointer-events: all; }
