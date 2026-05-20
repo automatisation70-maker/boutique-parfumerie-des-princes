@@ -175,8 +175,10 @@ function renderProducts() {
     grid.innerHTML = '<div class="no-results">Aucun produit dans cette catégorie</div>';
     return;
   }
+  // Stocker la liste visible pour le carousel modal
+  window._currentProductList = list;
   grid.innerHTML = list.map(p => `
-    <div class="prod-card" onclick="openModal('${p.id}')">
+    <div class="prod-card" onclick="openModal('${p.id}', window._currentProductList)">
       <div class="prod-img">
         ${prodImgHtml(p)}
         ${p.badge ? `<div class="prod-badge">${p.badge}</div>` : ''}
@@ -199,8 +201,9 @@ function updateFavs() {
   const grid = document.getElementById('favGrid');
   if (!favs.length) { empty.style.display = 'flex'; grid.innerHTML = ''; return; }
   empty.style.display = 'none';
-  grid.innerHTML = favs.map(p => `
-    <div class="prod-card" onclick="openModal('${p.id}')">
+  const favList = [...favs];
+  grid.innerHTML = favList.map(p => `
+    <div class="prod-card" onclick="openModal('${p.id}', favList)">
       <div class="prod-img">${prodImgHtml(p)}${p.badge ? `<div class="prod-badge">${p.badge}</div>` : ''}</div>
       <div class="prod-info">
         <div class="prod-cat">${p.cat}</div>
@@ -281,23 +284,32 @@ function shareProduct() {
 }
 
 // ── Modal ─────────────────────────────────────────────────
-function openModal(id) {
+// Liste des produits visibles à l'écran (pour navigation carousel global)
+let modalProductList = [];
+
+function openModal(id, list) {
   const p = PRODUCTS.find(x => x.id === id); if (!p) return;
   currentModalId = id;
+
+  // Si une liste est passée, on l'utilise ; sinon on garde la liste en cours
+  if (list) modalProductList = list;
+
+  // Image
   const wrap = document.getElementById('modalImgWrap');
-  if (p.image) {
-    wrap.style.setProperty('--thumb-src', `url('${p.image}')`);
+  const src = p.image;
+  if (src) {
+    wrap.style.setProperty('--thumb-src', `url('${src}')`);
     wrap.style.removeProperty('background');
   } else {
     wrap.style.removeProperty('--thumb-src');
-    wrap.style.background = p.bg || "";
+    wrap.style.background = p.bg || '';
   }
   let imgEl = wrap.querySelector('img, .modal-img-emoji');
   if (imgEl) imgEl.remove();
-  if (p.image) {
+  if (src) {
     const img = document.createElement('img');
-    img.src = p.image;
-    img.style.cssText = 'position:absolute;inset:0;width:100%;height:100%;object-fit:contain;object-position:center center;z-index:1;';
+    img.src = src;
+    img.style.cssText = 'position:absolute;inset:0;width:100%;height:100%;object-fit:contain;object-position:center center;padding:16px 0 8px;box-sizing:border-box;z-index:1;';
     img.onerror = () => { const em = document.createElement('div'); em.className = 'modal-img-emoji'; em.textContent = p.emoji; img.replaceWith(em); };
     wrap.insertBefore(img, wrap.firstChild);
   } else {
@@ -305,6 +317,8 @@ function openModal(id) {
     em.className = 'modal-img-emoji'; em.textContent = p.emoji;
     wrap.insertBefore(em, wrap.firstChild);
   }
+
+  // Infos
   document.getElementById('modalCat').textContent = p.cat;
   document.getElementById('modalName').textContent = p.name;
   document.getElementById('modalPrice').textContent = fmt(p.price) + ' FCFA';
@@ -313,14 +327,34 @@ function openModal(id) {
   badge.textContent = p.badge; badge.style.display = p.badge ? 'block' : 'none';
   const isFav = favs.some(f => f.id === id);
   const btn = document.getElementById('modalFav');
-  btn.textContent = isFav ? '♥' : '♡'; btn.className = 'modal-fav' + (isFav ? ' liked' : '');
+  btn.textContent = isFav ? '♥' : '♡'; btn.className = 'modal-fav-overlay' + (isFav ? ' liked' : '');
 
-  // ── Carousel de variantes ─────────────────────────────
+  // Flèches carousel global
+  updateGlobalNavArrows();
+
+  // Variantes (carousel de couleurs/tailles)
   renderVariants(p);
   updateNavArrows();
 
   document.getElementById('modalOverlay').classList.add('open');
   document.body.style.overflow = 'hidden';
+}
+
+// Met à jour les flèches gauche/droite du carousel global
+function updateGlobalNavArrows() {
+  const idx = modalProductList.findIndex(x => x.id === currentModalId);
+  const prev = document.getElementById('imgNavPrev');
+  const next = document.getElementById('imgNavNext');
+  if (!prev || !next) return;
+  prev.style.display = idx > 0 ? 'flex' : 'none';
+  next.style.display = (idx >= 0 && idx < modalProductList.length - 1) ? 'flex' : 'none';
+}
+
+// Navigation produit suivant/précédent dans le carousel global
+function navigateImg(dir) {
+  const idx = modalProductList.findIndex(x => x.id === currentModalId);
+  const target = modalProductList[idx + dir];
+  if (target) openModal(target.id);
 }
 
 function renderVariants(p) {

@@ -250,3 +250,17 @@ body { height: 100%; overflow: hidden; overscroll-behavior: none; font-family: v
 .modal-nav-next { right: 10px; }
 .modal-nav-prev.visible, .modal-nav-next.visible { display: flex; }
 .modal-overlay-row { display: flex; align-items: flex-end; justify-content: space-between; gap: 10px; }
+
+/* ── Carousel images produit dans le modal ── */
+.img-nav-btn { position: absolute; top: 50%; transform: translateY(-50%); z-index: 4; background: rgba(0,0,0,.5); border: none; color: #fff; width: 38px; height: 38px; border-radius: 50%; cursor: pointer; display: flex; align-items: center; justify-content: center; backdrop-filter: blur(4px); left: 10px; }
+.img-nav-btn.img-nav-next { left: auto; right: 10px; }
+.img-nav-btn:active { background: rgba(0,0,0,.75); transform: translateY(-50%) scale(.92); }
+
+/* Dots indicateurs en bas de l'image */
+.img-dots { position: absolute; bottom: 8px; left: 50%; transform: translateX(-50%); z-index: 4; display: flex; gap: 5px; }
+.img-dot { width: 6px; height: 6px; border-radius: 50%; background: rgba(255,255,255,.4); transition: background .2s, transform .2s; }
+.img-dot.active { background: #fff; transform: scale(1.3); }
+
+/* Bouton favori : rond, fond clair, bien visible */
+.modal-fav-overlay { width: 36px; height: 36px; min-width: 36px; min-height: 36px; border-radius: 50% !important; border: 1.5px solid #e0b060; background: #fffbf0; color: var(--gold); font-size: 18px; cursor: pointer; display: flex; align-items: center; justify-content: center; padding: 0; box-sizing: border-box; line-height: 1; }
+.modal-fav-overlay.liked { color: var(--red); border-color: #fcc; background: #fff0f0; }
