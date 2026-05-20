@@ -180,13 +180,13 @@ body { height: 100%; overflow: hidden; overscroll-behavior: none; font-family: v
 .modal-overlay { position: fixed; inset: 0; background: rgba(10,16,35,.6); z-index: 400; display: none; align-items: flex-end; justify-content: center; }
 .modal-overlay.open { display: flex; }
 /* ── Modal image flush top, arrondie, croix en overlay ── */
-.modal-sheet { background: var(--white); border-radius: 22px 22px 0 0; width: 100%; max-width: 480px; max-height: 92vh; overflow-y: auto; animation: slideUp .25s ease; display: flex; flex-direction: column; }
-.modal-img-wrap { position: relative; width: 100%; height: 62vw; max-height: 320px; min-height: 220px; overflow: hidden; background: #100d07; flex-shrink: 0; border-radius: 22px 22px 0 0; }
+.modal-sheet { background: #100d07; border-radius: 22px 22px 0 0; width: 100%; max-width: 480px; height: 92vh; overflow: hidden; animation: slideUp .25s ease; display: flex; flex-direction: column; }
+.modal-img-wrap { position: relative; width: 100%; flex: 1; min-height: 0; overflow: hidden; background: #100d07; border-radius: 22px 22px 0 0; }
 .modal-img-wrap::before { content: ""; position: absolute; inset: -16px; background-image: var(--thumb-src); background-size: cover; background-position: center; filter: blur(22px) brightness(0.35) saturate(0.4); z-index: 0; }
-.modal-img-wrap > img { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: contain; padding: 8px 8px 80px; box-sizing: border-box; z-index: 1; filter: drop-shadow(0 8px 28px rgba(0,0,0,.5)); }
+.modal-img-wrap > img { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; object-position: center top; padding: 0; box-sizing: border-box; z-index: 1; }
 .modal-img-overlay { position: absolute; inset: 0; z-index: 2; display: flex; flex-direction: column; justify-content: space-between; pointer-events: none; }
 /* Croix directement sur l'image, collée en haut à gauche */
-.modal-img-overlay-top { display: flex; align-items: center; justify-content: flex-start; padding: 10px 12px 0; pointer-events: all; }
+.modal-img-overlay-top { display: flex; align-items: center; justify-content: space-between; padding: 12px 14px 0; pointer-events: all; }
 .modal-img-overlay-bottom { background: linear-gradient(to top, rgba(8,12,28,.95) 0%, rgba(8,12,28,.65) 60%, transparent 100%); padding: 24px 14px 14px; pointer-events: all; }
 .modal-close-btn { width: 32px; height: 32px; border-radius: 50%; background: rgba(0,0,0,.55); border: none; color: #fff; cursor: pointer; display: flex; align-items: center; justify-content: center; backdrop-filter: blur(4px); }
 .modal-share-overlay { width: 34px; height: 34px; border-radius: 50%; background: rgba(37,211,102,.25); border: 1px solid rgba(37,211,102,.6); color: #25d366; cursor: pointer; display: flex; align-items: center; justify-content: center; }
@@ -202,7 +202,7 @@ body { height: 100%; overflow: hidden; overscroll-behavior: none; font-family: v
 .modal-overlay-actions { display: flex; gap: 8px; align-items: center; flex-shrink: 0; }
 .modal-img-emoji { font-size: 80px; }
 /* Corps sous l'image */
-.modal-body { padding: 14px 16px 28px; }
+.modal-body { display: none; }
 .modal-top { display: flex; align-items: flex-start; justify-content: space-between; margin-bottom: 8px; }
 .modal-cat { font-size: 10px; color: var(--text-3); text-transform: uppercase; letter-spacing: .8px; margin-bottom: 4px; }
 .modal-name { font-family: var(--font-display); font-size: 22px; font-weight: 600; color: var(--text); font-style: italic; line-height: 1.2; }
