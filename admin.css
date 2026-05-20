@@ -241,6 +241,10 @@ html, body { height: 100%; overflow: hidden; font-family: var(--font-body); back
 .prix-input-wrap { display: flex; align-items: center; flex: 1; gap: 8px; padding: 0 14px; }
 .prix-input { flex: 1; border: none; outline: none; font-size: 22px; font-weight: 700; color: var(--text); font-family: var(--font-mono); background: transparent; padding: 12px 0; }
 .prix-suffix { font-size: 13px; font-weight: 600; color: var(--text-3); }
+/* Supprimer les flèches du champ prix */
+.prix-input::-webkit-outer-spin-button,
+.prix-input::-webkit-inner-spin-button { -webkit-appearance: none; margin: 0; }
+.prix-input { -moz-appearance: textfield; }
 
 /* Style submit btn pour correspondre au design ancien */
 .submit-btn {
