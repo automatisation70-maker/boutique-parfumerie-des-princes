@@ -571,7 +571,9 @@ async function submitProduct() {
   const filename = `${id}_${nom.replace(/\s+/g,'_').replace(/[^a-zA-Z0-9_-]/g,'')}_nobg.png`;
 
   const btn = document.getElementById('submitBtn');
+  const btnRond = document.getElementById('prixSubmitBtn');
   btn.disabled = true; btn.textContent = 'Envoi en cours…';
+  if (btnRond) btnRond.disabled = true;
   setStep(2, 'loading');
 
   try {
@@ -591,13 +593,12 @@ async function submitProduct() {
     setStep(2, 'done'); setStep(3, 'loading');
     if (res.ok) {
       setStep(3, 'done');
-      btn.style.display = 'none';
-      document.getElementById('submitSuccess').style.display = 'block';
       showToast('Produit enregistré !');
-      // Auto-refresh dashboard et produits après 2s
+      // Auto-refresh puis reset automatique pour saisie rapide
       setTimeout(async () => {
         await loadAndRefresh();
-      }, 2000);
+        resetForm();
+      }, 1500);
     } else throw new Error();
   } catch {
     setStep(2, 'error');
