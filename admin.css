@@ -234,7 +234,7 @@ html, body { height: 100%; overflow: hidden; font-family: var(--font-body); back
 .prix-row {
   display: none; align-items: center; gap: 0;
   background: var(--white); border: 1px solid var(--border);
-  border-radius: 12px; overflow: hidden; margin-bottom: 16px;
+  border-radius: 12px; overflow: visible; margin-bottom: 16px;
 }
 .prix-row-label-wrap { padding: 12px 14px; border-right: 1px solid var(--border); }
 .prix-label { font-size: 10px; font-weight: 700; color: var(--text-2); text-transform: uppercase; letter-spacing: .8px; }
