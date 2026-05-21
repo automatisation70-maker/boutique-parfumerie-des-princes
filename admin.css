@@ -245,7 +245,7 @@ html, body { height: 100%; overflow: hidden; font-family: var(--font-body); back
 .prix-submit-btn {
   display: flex; align-items: center; justify-content: center;
   width: 40px; height: 40px; border-radius: 50%;
-  background: var(--accent); color: #fff; border: none;
+  background: var(--navy); color: #fff; border: none;
   cursor: pointer; flex-shrink: 0; margin-right: 8px;
   transition: background .2s, transform .1s;
 }
