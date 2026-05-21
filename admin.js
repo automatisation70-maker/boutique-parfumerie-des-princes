@@ -635,6 +635,8 @@ function resetForm() {
   const btn = document.getElementById('submitBtn');
   btn.style.display = 'block'; btn.disabled = false;
   btn.textContent = 'Enregistrer →';
+  const btnRond = document.getElementById('prixSubmitBtn');
+  if (btnRond) btnRond.disabled = false;
   ['fPrix','fNom','fDesc','fGroupe','fCouleur'].forEach(id => document.getElementById(id).value = '');
   document.getElementById('photoCamera').value = '';
   document.getElementById('photoGallery').value = '';
