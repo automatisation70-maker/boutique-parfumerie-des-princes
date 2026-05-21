@@ -582,7 +582,7 @@ async function submitProduct() {
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({
         id_produit: id, nom_produit: nom, categorie: cat,
-        prix: Math.round(parseFloat(prix)),
+        prix: prix.split(".")[0],
         description: document.getElementById('fDesc').value,
         badge: document.getElementById('fBadge').value,
         groupe: document.getElementById('fGroupe').value,
