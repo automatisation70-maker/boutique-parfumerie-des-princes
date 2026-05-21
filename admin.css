@@ -242,6 +242,17 @@ html, body { height: 100%; overflow: hidden; font-family: var(--font-body); back
 .prix-input { flex: 1; border: none; outline: none; font-size: 22px; font-weight: 700; color: var(--text); font-family: var(--font-mono); background: transparent; padding: 12px 0; }
 .prix-suffix { font-size: 13px; font-weight: 600; color: var(--text-3); }
 /* Supprimer les flèches du champ prix */
+.prix-submit-btn {
+  display: flex; align-items: center; justify-content: center;
+  width: 40px; height: 40px; border-radius: 50%;
+  background: var(--accent); color: #fff; border: none;
+  cursor: pointer; flex-shrink: 0; margin-right: 8px;
+  transition: background .2s, transform .1s;
+}
+.prix-submit-btn:hover { background: #1a2a4a; transform: scale(1.08); }
+.prix-submit-btn:active { transform: scale(0.95); }
+.prix-submit-btn:disabled { background: var(--border); cursor: not-allowed; transform: none; }
+
 .prix-input::-webkit-outer-spin-button,
 .prix-input::-webkit-inner-spin-button { -webkit-appearance: none; margin: 0; }
 .prix-input { -moz-appearance: textfield; }
