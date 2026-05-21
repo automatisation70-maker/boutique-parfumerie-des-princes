@@ -1,219 +1,440 @@
 <!DOCTYPE html>
 <html lang="fr">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
-  <title>Parfumerie des Princes</title>
-  <link rel="preconnect" href="https://fonts.googleapis.com" />
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,600;1,400&family=DM+Sans:wght@400;500;600&family=DM+Mono:wght@400&display=swap" rel="stylesheet" />
-  <link rel="stylesheet" href="style.css" />
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Site-Resto — Sites web pour restaurants & commerces</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,700;1,400&family=Outfit:wght@300;400;500;600&display=swap" rel="stylesheet">
+<style>
+:root {
+  --ink: #0f0e0c;
+  --paper: #f7f4ee;
+  --paper2: #ede9e0;
+  --accent: #d4500a;
+  --accent2: #2a5c3f;
+  --gold: #c8973a;
+  --muted: #888070;
+  --border: rgba(15,14,12,0.1);
+}
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0;}
+html{scroll-behavior:smooth;overflow-x:hidden;}
+body{font-family:'Outfit',sans-serif;background:var(--paper);color:var(--ink);overflow-x:hidden;}
+
+/* ── NAV ── */
+nav{position:fixed;top:0;left:0;right:0;z-index:100;display:flex;align-items:center;justify-content:space-between;padding:1.1rem 3rem;background:rgba(247,244,238,0.92);backdrop-filter:blur(12px);border-bottom:1px solid var(--border);transition:padding .3s;}
+nav.scrolled{padding:.75rem 3rem;}
+.nav-brand{font-family:'Playfair Display',serif;font-size:1.35rem;color:var(--ink);text-decoration:none;letter-spacing:.02em;}
+.nav-brand span{color:var(--accent);}
+.nav-links{display:flex;gap:2rem;list-style:none;align-items:center;}
+.nav-links a{font-size:.8rem;font-weight:500;letter-spacing:.08em;text-transform:uppercase;color:var(--muted);text-decoration:none;transition:color .2s;}
+.nav-links a:hover{color:var(--accent);}
+.nav-cta{background:var(--ink)!important;color:var(--paper)!important;padding:.45rem 1.2rem!important;transition:background .2s!important;}
+.nav-cta:hover{background:var(--accent)!important;}
+.hamburger{display:none;flex-direction:column;gap:5px;cursor:pointer;background:none;border:none;}
+.hamburger span{width:22px;height:1.5px;background:var(--ink);transition:.3s;display:block;}
+
+/* ── HERO ── */
+.hero{min-height:100vh;display:grid;grid-template-columns:1fr 1fr;align-items:center;padding:8rem 3rem 4rem;gap:4rem;max-width:1300px;margin:0 auto;}
+.hero-left{}
+.hero-tag{display:inline-flex;align-items:center;gap:.5rem;font-size:.72rem;font-weight:600;letter-spacing:.15em;text-transform:uppercase;color:var(--accent);margin-bottom:1.5rem;}
+.hero-tag::before{content:'';width:24px;height:1px;background:var(--accent);}
+.hero-title{font-family:'Playfair Display',serif;font-size:clamp(2.8rem,5vw,5rem);line-height:1.05;font-weight:700;margin-bottom:1.5rem;}
+.hero-title em{font-style:italic;color:var(--accent);}
+.hero-sub{font-size:1rem;color:var(--muted);line-height:1.75;font-weight:300;max-width:420px;margin-bottom:2.5rem;}
+.hero-actions{display:flex;gap:1rem;flex-wrap:wrap;}
+.btn-primary{background:var(--ink);color:var(--paper);padding:.8rem 2rem;font-size:.8rem;font-weight:600;letter-spacing:.08em;text-transform:uppercase;text-decoration:none;border:none;cursor:pointer;font-family:'Outfit',sans-serif;transition:background .2s,transform .2s;}
+.btn-primary:hover{background:var(--accent);transform:translateY(-2px);}
+.btn-secondary{background:transparent;color:var(--ink);padding:.8rem 2rem;font-size:.8rem;font-weight:600;letter-spacing:.08em;text-transform:uppercase;text-decoration:none;border:1.5px solid var(--border);cursor:pointer;font-family:'Outfit',sans-serif;transition:border-color .2s,color .2s;}
+.btn-secondary:hover{border-color:var(--accent);color:var(--accent);}
+.hero-right{display:grid;grid-template-columns:1fr 1fr;gap:.75rem;}
+.hero-card{background:var(--paper2);border:1px solid var(--border);padding:1.5rem;position:relative;overflow:hidden;transition:transform .3s,box-shadow .3s;}
+.hero-card:hover{transform:translateY(-4px);box-shadow:0 12px 32px rgba(15,14,12,.1);}
+.hero-card:first-child{grid-column:1/-1;}
+.hero-card-emoji{font-size:2rem;margin-bottom:.75rem;display:block;}
+.hero-card-title{font-family:'Playfair Display',serif;font-size:1.05rem;margin-bottom:.35rem;}
+.hero-card-desc{font-size:.78rem;color:var(--muted);line-height:1.6;}
+.hero-card-tag{position:absolute;top:.75rem;right:.75rem;font-size:.6rem;font-weight:600;letter-spacing:.1em;text-transform:uppercase;padding:.2rem .6rem;background:var(--accent);color:#fff;}
+
+/* ── STATS ── */
+.stats{background:var(--ink);color:var(--paper);padding:3rem;display:flex;justify-content:center;gap:0;}
+.stat-item{padding:0 3.5rem;text-align:center;border-right:1px solid rgba(255,255,255,.1);}
+.stat-item:last-child{border:none;}
+.stat-num{font-family:'Playfair Display',serif;font-size:2.5rem;font-weight:700;color:var(--gold);}
+.stat-label{font-size:.72rem;letter-spacing:.1em;text-transform:uppercase;color:rgba(247,244,238,.5);margin-top:.25rem;}
+
+/* ── PORTFOLIO ── */
+.portfolio{padding:6rem 3rem;max-width:1300px;margin:0 auto;}
+.section-head{margin-bottom:3rem;}
+.section-tag{font-size:.7rem;font-weight:600;letter-spacing:.2em;text-transform:uppercase;color:var(--accent);display:flex;align-items:center;gap:.5rem;margin-bottom:.75rem;}
+.section-tag::before{content:'';width:20px;height:1px;background:var(--accent);}
+.section-title{font-family:'Playfair Display',serif;font-size:clamp(2rem,4vw,3rem);line-height:1.1;}
+.section-title em{font-style:italic;color:var(--accent);}
+
+.portfolio-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:1px;background:var(--border);}
+.portfolio-card{background:var(--paper);padding:2rem;transition:background .25s;cursor:pointer;text-decoration:none;color:inherit;display:block;}
+.portfolio-card:hover{background:var(--paper2);}
+.portfolio-card:hover .portfolio-arrow{transform:translate(3px,-3px);}
+.portfolio-cat{font-size:.65rem;font-weight:600;letter-spacing:.15em;text-transform:uppercase;color:var(--muted);margin-bottom:.5rem;}
+.portfolio-name{font-family:'Playfair Display',serif;font-size:1.4rem;margin-bottom:.4rem;}
+.portfolio-city{font-size:.8rem;color:var(--muted);margin-bottom:1rem;}
+.portfolio-tags{display:flex;gap:.4rem;flex-wrap:wrap;margin-bottom:1.25rem;}
+.tag{font-size:.62rem;font-weight:500;letter-spacing:.06em;padding:.2rem .6rem;background:var(--paper2);border:1px solid var(--border);}
+.portfolio-footer{display:flex;align-items:center;justify-content:space-between;}
+.portfolio-live{font-size:.72rem;font-weight:600;color:var(--accent2);letter-spacing:.06em;}
+.portfolio-live::before{content:'●';margin-right:.3rem;font-size:.5rem;}
+.portfolio-arrow{font-size:.9rem;transition:transform .25s;color:var(--muted);}
+.portfolio-add{background:var(--paper2);border:2px dashed var(--border);padding:2rem;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:.75rem;cursor:default;min-height:200px;}
+.portfolio-add-icon{font-size:2rem;opacity:.25;}
+.portfolio-add-text{font-size:.78rem;color:var(--muted);text-align:center;line-height:1.6;}
+
+/* ── OFFRES ── */
+.offres{background:var(--paper2);padding:6rem 3rem;}
+.offres-inner{max-width:1100px;margin:0 auto;}
+.offres-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:1.5rem;margin-top:3rem;}
+.offre-card{background:var(--paper);border:1px solid var(--border);padding:2rem;}
+.offre-card.featured{background:var(--ink);color:var(--paper);border-color:var(--ink);}
+.offre-icon{font-size:1.5rem;margin-bottom:1rem;display:block;}
+.offre-name{font-family:'Playfair Display',serif;font-size:1.2rem;margin-bottom:.35rem;}
+.offre-card.featured .offre-name{color:var(--gold);}
+.offre-desc{font-size:.82rem;color:var(--muted);line-height:1.65;margin-bottom:1.25rem;}
+.offre-card.featured .offre-desc{color:rgba(247,244,238,.6);}
+.offre-price{font-family:'Playfair Display',serif;font-size:1.8rem;font-weight:700;color:var(--accent);}
+.offre-price sub{font-size:.9rem;font-weight:400;font-family:'Outfit',sans-serif;}
+.offre-card.featured .offre-price{color:var(--gold);}
+.offre-mention{font-size:.7rem;color:var(--muted);margin-top:.25rem;}
+.offre-card.featured .offre-mention{color:rgba(247,244,238,.4);}
+.offre-list{list-style:none;margin-top:1.25rem;display:flex;flex-direction:column;gap:.5rem;}
+.offre-list li{font-size:.8rem;display:flex;align-items:center;gap:.5rem;color:var(--muted);}
+.offre-card.featured .offre-list li{color:rgba(247,244,238,.7);}
+.offre-list li::before{content:'✓';color:var(--accent2);font-weight:700;font-size:.75rem;}
+.offre-card.featured .offre-list li::before{color:var(--gold);}
+
+/* ── PROCESS ── */
+.process{padding:6rem 3rem;max-width:1100px;margin:0 auto;}
+.process-steps{display:grid;grid-template-columns:repeat(4,1fr);gap:2rem;margin-top:3rem;position:relative;}
+.process-steps::before{content:'';position:absolute;top:1.5rem;left:10%;right:10%;height:1px;background:var(--border);z-index:0;}
+.process-step{text-align:center;position:relative;z-index:1;}
+.process-num{width:48px;height:48px;background:var(--paper);border:1.5px solid var(--border);border-radius:50%;display:flex;align-items:center;justify-content:center;font-family:'Playfair Display',serif;font-size:1.1rem;font-weight:700;margin:0 auto 1rem;transition:background .2s,border-color .2s;}
+.process-step:hover .process-num{background:var(--accent);border-color:var(--accent);color:#fff;}
+.process-step-title{font-weight:600;font-size:.88rem;margin-bottom:.4rem;}
+.process-step-desc{font-size:.75rem;color:var(--muted);line-height:1.6;}
+
+/* ── CONTACT ── */
+.contact{background:var(--ink);color:var(--paper);padding:6rem 3rem;}
+.contact-inner{max-width:900px;margin:0 auto;display:grid;grid-template-columns:1fr 1fr;gap:5rem;align-items:center;}
+.contact-left h2{font-family:'Playfair Display',serif;font-size:clamp(1.8rem,3.5vw,2.8rem);line-height:1.1;margin-bottom:1rem;}
+.contact-left h2 em{font-style:italic;color:var(--gold);}
+.contact-left p{font-size:.88rem;color:rgba(247,244,238,.6);line-height:1.75;margin-bottom:2rem;}
+.contact-info{display:flex;flex-direction:column;gap:1rem;}
+.contact-item{display:flex;align-items:center;gap:.75rem;font-size:.85rem;color:rgba(247,244,238,.8);}
+.contact-item span:first-child{font-size:1rem;}
+.contact-form{display:flex;flex-direction:column;gap:.75rem;}
+.contact-form input,.contact-form textarea,.contact-form select{width:100%;padding:.8rem 1rem;background:rgba(247,244,238,.06);border:1px solid rgba(247,244,238,.12);color:var(--paper);font-family:'Outfit',sans-serif;font-size:.88rem;outline:none;transition:border-color .2s;}
+.contact-form input:focus,.contact-form textarea:focus,.contact-form select:focus{border-color:var(--gold);}
+.contact-form input::placeholder,.contact-form textarea::placeholder{color:rgba(247,244,238,.3);}
+.contact-form select{color:rgba(247,244,238,.5);}
+.contact-form select option{background:var(--ink);color:var(--paper);}
+.contact-form textarea{height:100px;resize:vertical;}
+.contact-form button{background:var(--gold);color:var(--ink);padding:.85rem;font-size:.8rem;font-weight:700;letter-spacing:.1em;text-transform:uppercase;border:none;cursor:pointer;font-family:'Outfit',sans-serif;transition:opacity .2s,transform .2s;}
+.contact-form button:hover{opacity:.88;transform:translateY(-1px);}
+
+/* ── FOOTER ── */
+footer{background:var(--ink);border-top:1px solid rgba(247,244,238,.08);padding:2rem 3rem;}
+.footer-inner{max-width:1300px;margin:0 auto;display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:1rem;}
+.footer-brand{font-family:'Playfair Display',serif;font-size:1.1rem;color:var(--paper);}
+.footer-brand span{color:var(--gold);}
+.footer-copy{font-size:.72rem;color:rgba(247,244,238,.3);}
+
+/* ── ANIMATIONS ── */
+.reveal{opacity:0;transform:translateY(24px);transition:opacity .7s cubic-bezier(.16,1,.3,1),transform .7s cubic-bezier(.16,1,.3,1);}
+.reveal.visible{opacity:1;transform:translateY(0);}
+
+/* ── MOBILE ── */
+@media(max-width:900px){
+  nav{padding:.9rem 1.5rem;}
+  nav.scrolled{padding:.7rem 1.5rem;}
+  .nav-links{display:none;position:fixed;inset:0;background:var(--paper);flex-direction:column;align-items:center;justify-content:center;gap:2rem;z-index:99;}
+  .nav-links.open{display:flex;}
+  .hamburger{display:flex;z-index:100;}
+  .hero{grid-template-columns:1fr;padding:6rem 1.5rem 3rem;gap:2.5rem;}
+  .hero-right{grid-template-columns:1fr 1fr;}
+  .stats{flex-wrap:wrap;padding:2rem 1.5rem;gap:1.5rem;}
+  .stat-item{border:none;padding:0 1.5rem;}
+  .portfolio,.process{padding:4rem 1.5rem;}
+  .portfolio-grid{grid-template-columns:1fr;}
+  .offres{padding:4rem 1.5rem;}
+  .offres-grid{grid-template-columns:1fr;}
+  .contact{padding:4rem 1.5rem;}
+  .contact-inner{grid-template-columns:1fr;gap:2.5rem;}
+  .process-steps{grid-template-columns:1fr 1fr;}
+  .process-steps::before{display:none;}
+  footer{padding:1.5rem;}
+}
+</style>
 </head>
 <body>
 
-  <!-- TOAST -->
-  <div class="toast" id="toast">
-    <span class="toast-ico">✓</span>
-    <span id="toast-msg">Ajouté au panier</span>
-  </div>
+<nav id="nav">
+  <a class="nav-brand" href="#"><span>Site</span>-Resto</a>
+  <ul class="nav-links" id="navLinks">
+    <li><a href="#portfolio" onclick="closeNav()">Réalisations</a></li>
+    <li><a href="#offres" onclick="closeNav()">Offres</a></li>
+    <li><a href="#process" onclick="closeNav()">Comment ça marche</a></li>
+    <li><a href="#contact" class="nav-cta" onclick="closeNav()">Nous contacter</a></li>
+  </ul>
+  <button class="hamburger" id="hamburger" onclick="toggleNav()">
+    <span></span><span></span><span></span>
+  </button>
+</nav>
 
-  <!-- MODAL PRODUIT -->
-  <div class="modal-overlay" id="modalOverlay" onclick="closeModal(event)">
-    <div class="modal-sheet" id="modalSheet">
-      <div class="modal-handle"></div>
-      <div class="modal-img-wrap" id="modalImgWrap"></div>
-      <div class="modal-body">
-        <div class="modal-top">
-          <div>
-            <div class="modal-cat" id="modalCat"></div>
-            <div class="modal-name" id="modalName"></div>
-          </div>
-          <div class="modal-badge" id="modalBadge" style="display:none"></div>
-        </div>
-        <div class="modal-price-row">
-          <div class="modal-price" id="modalPrice"></div>
-          <button class="modal-fav" id="modalFav" onclick="toggleFavModal()">♡</button>
-        </div>
-        <div class="modal-desc" id="modalDesc"></div>
-        <button class="modal-add-btn" id="modalAddBtn" onclick="addFromModal()">
-          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="9" cy="21" r="1"/><circle cx="20" cy="21" r="1"/><path d="M1 1h4l2.68 13.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61L23 6H6"/></svg>
-          Ajouter au panier
-        </button>
+<!-- HERO -->
+<section class="hero" id="accueil">
+  <div class="hero-left">
+    <p class="hero-tag">Agence web · Afrique francophone</p>
+    <h1 class="hero-title">Des sites pros<br>pour vos <em>commerces</em></h1>
+    <p class="hero-sub">Restaurants, cliniques, boutiques, salons — nous créons des sites vitrines modernes, rapides et adaptés au mobile, livrés en moins de 7 jours.</p>
+    <div class="hero-actions">
+      <a href="#contact" class="btn-primary">Démarrer un projet</a>
+      <a href="#portfolio" class="btn-secondary">Voir nos réalisations</a>
+    </div>
+  </div>
+  <div class="hero-right">
+    <div class="hero-card">
+      <span class="hero-card-tag">Livré en 7 jours</span>
+      <span class="hero-card-emoji">⚡</span>
+      <p class="hero-card-title">Rapide & professionnel</p>
+      <p class="hero-card-desc">Du premier échange à la mise en ligne, nous gérons tout — design, hébergement, domaine.</p>
+    </div>
+    <div class="hero-card">
+      <span class="hero-card-emoji">📱</span>
+      <p class="hero-card-title">100% mobile</p>
+      <p class="hero-card-desc">Optimisé pour vos clients qui naviguent depuis leur téléphone.</p>
+    </div>
+    <div class="hero-card">
+      <span class="hero-card-emoji">🔧</span>
+      <p class="hero-card-title">Maintenance incluse</p>
+      <p class="hero-card-desc">Mise à jour des prix, photos, horaires — on s'occupe de tout.</p>
+    </div>
+  </div>
+</section>
+
+<!-- STATS -->
+<div class="stats">
+  <div class="stat-item"><div class="stat-num" id="sNb">1</div><div class="stat-label">Site livré</div></div>
+  <div class="stat-item"><div class="stat-num">< 7j</div><div class="stat-label">Délai de livraison</div></div>
+  <div class="stat-item"><div class="stat-num">3k</div><div class="stat-label">FCFA / mois</div></div>
+  <div class="stat-item"><div class="stat-num">100%</div><div class="stat-label">Mobile-first</div></div>
+</div>
+
+<!-- PORTFOLIO -->
+<section class="portfolio" id="portfolio">
+  <div class="section-head reveal">
+    <p class="section-tag">Réalisations</p>
+    <h2 class="section-title">Sites déjà <em>en ligne</em></h2>
+  </div>
+  <div class="portfolio-grid" id="portfolioGrid">
+    <!-- Généré par JS -->
+  </div>
+</section>
+
+<!-- OFFRES -->
+<section class="offres" id="offres">
+  <div class="offres-inner">
+    <div class="section-head reveal">
+      <p class="section-tag">Tarifs</p>
+      <h2 class="section-title">Des offres <em>claires</em></h2>
+    </div>
+    <div class="offres-grid">
+      <div class="offre-card reveal">
+        <span class="offre-icon">🌱</span>
+        <h3 class="offre-name">Vitrine Essentielle</h3>
+        <p class="offre-desc">Pour démarrer avec un site propre et professionnel. Idéal pour les petits commerces.</p>
+        <div class="offre-price">35 000<sub> FCFA</sub></div>
+        <p class="offre-mention">+ 3 000 FCFA / mois</p>
+        <ul class="offre-list">
+          <li>Accueil + Contact + Menu ou Services</li>
+          <li>Adapté mobile</li>
+          <li>Bouton d'appel direct</li>
+          <li>Livraison en 5–7 jours</li>
+          <li>2 modifications / mois incluses</li>
+        </ul>
+      </div>
+      <div class="offre-card featured reveal">
+        <span class="offre-icon">🔥</span>
+        <h3 class="offre-name">Vitrine Pro</h3>
+        <p class="offre-desc">La formule la plus demandée. Galerie, menu complet, animations et design sur mesure.</p>
+        <div class="offre-price">60 000<sub> FCFA</sub></div>
+        <p class="offre-mention">+ 5 000 FCFA / mois</p>
+        <ul class="offre-list">
+          <li>Tout le pack Essentiel</li>
+          <li>Galerie photos par catégorie</li>
+          <li>Menu complet avec prix</li>
+          <li>Formulaire de réservation</li>
+          <li>Design premium sur mesure</li>
+        </ul>
+      </div>
+      <div class="offre-card reveal">
+        <span class="offre-icon">🚀</span>
+        <h3 class="offre-name">Sur mesure</h3>
+        <p class="offre-desc">Cliniques, boutiques, agences — des fonctionnalités avancées adaptées à votre activité.</p>
+        <div class="offre-price">Sur devis</div>
+        <p class="offre-mention">Maintenance selon besoins</p>
+        <ul class="offre-list">
+          <li>Analyse de vos besoins</li>
+          <li>Fonctionnalités spécifiques</li>
+          <li>Réservation / prise de RDV</li>
+          <li>Chatbot automatisé</li>
+          <li>Accompagnement complet</li>
+        </ul>
       </div>
     </div>
   </div>
+</section>
 
-  <!-- APP -->
-  <div class="app">
-
-    <!-- HEADER -->
-    <header class="header">
-      <div class="header-top">
-        <div class="logo-row">
-          <div class="logo-sq">DP</div>
-          <div class="brand">
-            <span class="brand-name" id="brandName">Parfumerie des Princes</span>
-            <span class="brand-sub">Bouaké · Côte d'Ivoire</span>
-          </div>
-        </div>
-      </div>
-      <div class="search-bar">
-        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.35-4.35"/></svg>
-        <input type="text" id="searchInput" placeholder="Rechercher un produit, une catégorie…" oninput="doSearch(this.value)" />
-        <button class="search-clear" id="searchClear" onclick="clearSearch()" style="display:none">✕</button>
-      </div>
-    </header>
-
-    <!-- FILTRES CATÉGORIES -->
-    <div class="cats-bar" id="catsBar">
-      <button class="cp active" data-cat="Tout" onclick="filterCat('Tout',this)">Tout</button>
-      <button class="cp" data-cat="Parfum" onclick="filterCat('Parfum',this)">Parfums</button>
-      <button class="cp" data-cat="Sac" onclick="filterCat('Sac',this)">Sacs</button>
-      <button class="cp" data-cat="Chaine" onclick="filterCat('Chaine',this)">Chaînes</button>
-      <button class="cp" data-cat="Porte-monnaie" onclick="filterCat('Porte-monnaie',this)">Porte-monnaie</button>
-    </div>
-
-    <!-- FILTRES PRIX (visible après clic catégorie) -->
-    <div class="price-filters" id="priceFilters" style="display:none">
-      <span class="pf-label">Prix :</span>
-      <button class="pf" data-range="all" onclick="filterPrice('all',this)" class="pf active">Tous</button>
-      <button class="pf" data-range="0-10000" onclick="filterPrice('0-10000',this)">- 10 000</button>
-      <button class="pf" data-range="10000-30000" onclick="filterPrice('10000-30000',this)">10 – 30k</button>
-      <button class="pf" data-range="30000-999999" onclick="filterPrice('30000-999999',this)">+ 30 000</button>
-    </div>
-
-    <!-- PAGES -->
-    <main class="main-content">
-
-      <!-- PAGE ACCUEIL -->
-      <div class="page active" id="p-home">
-
-        <!-- Grille catégories -->
-        <div id="catSection">
-          <p class="section-title">Nos catégories</p>
-          <div class="cat-grid" id="catGrid">
-            <div class="cat-card" onclick="filterCat('Parfum',null)" style="--bg:#f0e8f5">
-              <div class="cat-emoji">🌹</div>
-              <div class="cat-overlay"></div>
-              <div class="cat-info"><span class="cat-name">Parfums</span></div>
-            </div>
-            <div class="cat-card" onclick="filterCat('Sac',null)" style="--bg:#f5ece0">
-              <div class="cat-emoji">👜</div>
-              <div class="cat-overlay"></div>
-              <div class="cat-info"><span class="cat-name">Sacs</span></div>
-            </div>
-            <div class="cat-card" onclick="filterCat('Chaine',null)" style="--bg:#f0f5e0">
-              <div class="cat-emoji">📿</div>
-              <div class="cat-overlay"></div>
-              <div class="cat-info"><span class="cat-name">Chaînes</span></div>
-            </div>
-            <div class="cat-card" onclick="filterCat('Porte-monnaie',null)" style="--bg:#e0f0f5">
-              <div class="cat-emoji">👛</div>
-              <div class="cat-overlay"></div>
-              <div class="cat-info"><span class="cat-name">Porte-monnaie</span></div>
-            </div>
-          </div>
-        </div>
-
-        <!-- Produits -->
-        <div class="section-header" id="prodHeader">
-          <p class="section-title" id="prodTitle">Tous les produits</p>
-        </div>
-        <div class="prod-grid" id="prodGrid"></div>
-
-        <!-- Coup de cœur -->
-        <div id="coupSection">
-          <p class="section-title">Coup de cœur</p>
-          <div class="featured-card" id="featuredCard"></div>
-        </div>
-
-      </div>
-
-      <!-- PAGE FAVORIS -->
-      <div class="page" id="p-fav">
-        <p class="page-heading">Mes favoris</p>
-        <div class="empty-state" id="favEmpty">
-          <div class="empty-ico">♡</div>
-          <p>Aucun favori</p>
-          <small>Appuyez sur ♡ pour sauvegarder un produit</small>
-        </div>
-        <div class="prod-grid" id="favGrid"></div>
-      </div>
-
-      <!-- PAGE PANIER -->
-      <div class="page" id="p-cart">
-        <p class="page-heading">Mon panier</p>
-        <div class="empty-state" id="cartEmpty">
-          <div class="empty-ico">🛒</div>
-          <p>Votre panier est vide</p>
-          <small>Ajoutez des produits depuis le catalogue</small>
-        </div>
-        <div id="cartItems"></div>
-        <div class="cart-footer" id="cartFooter" style="display:none">
-          <div class="cart-total-row">
-            <span class="ct-label">Total de la commande</span>
-            <span class="ct-value" id="cartTotalVal">0 FCFA</span>
-          </div>
-          <button class="wa-order-btn" onclick="orderWhatsApp()">
-            <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/></svg>
-            Commander via WhatsApp
-          </button>
-        </div>
-      </div>
-
-      <!-- PAGE CONTACT -->
-      <div class="page" id="p-contact">
-        <div class="contact-hero">
-          <div class="ch-logo">DP</div>
-          <p class="ch-name" id="contactName">Parfumerie des Princes</p>
-          <p class="ch-sub">Bouaké, Côte d'Ivoire</p>
-        </div>
-        <div class="info-card">
-          <div class="info-row">
-            <div class="info-ico">📍</div>
-            <div><div class="info-lbl">Adresse</div><div class="info-val" id="contactAddr">Quartier Kennedy, Feu Rouge, Bouaké</div></div>
-          </div>
-          <div class="info-row">
-            <div class="info-ico">📞</div>
-            <div><div class="info-lbl">Téléphone / WhatsApp</div><div class="info-val" id="contactPhone">+225 07 XX XX XX XX</div></div>
-          </div>
-        </div>
-        <div class="hours-card">
-          <p class="hours-title">Horaires d'ouverture</p>
-          <div class="hours-row"><span>Tous les jours</span><span class="open">10h – 23h</span></div>
-        </div>
-        <button class="wa-contact-btn" id="waContactBtn" onclick="contactWhatsApp()">
-          <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/></svg>
-          Nous contacter sur WhatsApp
-        </button>
-      </div>
-
-    </main>
-
-    <!-- BOTTOM NAV -->
-    <nav class="bottom-nav">
-      <button class="ni active" data-page="home" onclick="goTo('home',this)" aria-label="Accueil">
-        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg>
-        <span>Accueil</span>
-      </button>
-      <button class="ni" data-page="fav" onclick="goTo('fav',this)" aria-label="Favoris">
-        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/></svg>
-        <span>Favoris</span>
-      </button>
-      <button class="ni" data-page="cart" onclick="goTo('cart',this)" aria-label="Panier" style="position:relative">
-        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><circle cx="9" cy="21" r="1"/><circle cx="20" cy="21" r="1"/><path d="M1 1h4l2.68 13.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61L23 6H6"/></svg>
-        <span>Panier</span>
-        <span class="cart-badge" id="cartBadge" style="display:none">0</span>
-      </button>
-      <button class="ni" data-page="contact" onclick="goTo('contact',this)" aria-label="Contact">
-        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07A19.5 19.5 0 0 1 4.69 13a19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 3.6 2.22h3a2 2 0 0 1 2 1.72c.127.96.361 1.903.7 2.81a2 2 0 0 1-.45 2.11L7.91 9.91a16 16 0 0 0 6.07 6.07l.9-.9a2 2 0 0 1 2.11-.45c.907.339 1.85.573 2.81.7A2 2 0 0 1 21.73 17"/></svg>
-        <span>Contact</span>
-      </button>
-    </nav>
-
+<!-- PROCESS -->
+<section class="process" id="process">
+  <div class="section-head reveal">
+    <p class="section-tag">Comment ça marche</p>
+    <h2 class="section-title">De l'idée au <em>site en ligne</em></h2>
   </div>
+  <div class="process-steps">
+    <div class="process-step reveal">
+      <div class="process-num">1</div>
+      <h4 class="process-step-title">Vous nous contactez</h4>
+      <p class="process-step-desc">Par WhatsApp ou via le formulaire. On discute de votre projet en 15 minutes.</p>
+    </div>
+    <div class="process-step reveal">
+      <div class="process-num">2</div>
+      <h4 class="process-step-title">Devis & validation</h4>
+      <p class="process-step-desc">Vous recevez un devis clair. On démarre dès validation et premier versement.</p>
+    </div>
+    <div class="process-step reveal">
+      <div class="process-num">3</div>
+      <h4 class="process-step-title">Création en 5–7 jours</h4>
+      <p class="process-step-desc">Nous construisons votre site. Vous validez avant la mise en ligne.</p>
+    </div>
+    <div class="process-step reveal">
+      <div class="process-num">4</div>
+      <h4 class="process-step-title">Mise en ligne & suivi</h4>
+      <p class="process-step-desc">Votre site est live. Nous assurons la maintenance et les mises à jour.</p>
+    </div>
+  </div>
+</section>
 
-  <script src="products.js"></script>
-  <script src="app.js"></script>
+<!-- CONTACT -->
+<section class="contact" id="contact">
+  <div class="contact-inner">
+    <div class="contact-left reveal">
+      <h2>Démarrons votre <em>projet</em></h2>
+      <p>Répondez-nous en moins de 24h. Échange sans engagement — on vous explique tout avant de commencer.</p>
+      <div class="contact-info">
+        <div class="contact-item"><span>📱</span><span>WhatsApp disponible 7j/7</span></div>
+        <div class="contact-item"><span>📍</span><span>Côte d'Ivoire & diaspora</span></div>
+        <div class="contact-item"><span>✉️</span><span>contact@site-resto.com</span></div>
+      </div>
+    </div>
+    <div class="contact-form reveal">
+      <input type="text" placeholder="Votre nom">
+      <input type="tel" placeholder="Numéro WhatsApp">
+      <select>
+        <option value="" disabled selected>Type de commerce</option>
+        <option>Restaurant</option>
+        <option>Clinique / Cabinet médical</option>
+        <option>Boutique / Parfumerie</option>
+        <option>Salon de coiffure / Beauté</option>
+        <option>Autre</option>
+      </select>
+      <textarea placeholder="Décrivez votre projet en quelques mots…"></textarea>
+      <button type="button">Envoyer la demande →</button>
+    </div>
+  </div>
+</section>
+
+<footer>
+  <div class="footer-inner">
+    <p class="footer-brand"><span>Site</span>-Resto</p>
+    <p class="footer-copy">© 2025 Site-Resto · Création de sites web pour commerces en Afrique</p>
+    <p class="footer-copy">site-resto.com</p>
+  </div>
+</footer>
+
+<script>
+/* ── PORTFOLIO DATA ──
+   Pour ajouter un site : ajoute un objet dans SITES.
+   url: lien vers le site en ligne
+   cat: catégorie affichée
+*/
+const SITES = [
+  {
+    name: "Le Chef",
+    city: "Bouaké, Côte d'Ivoire",
+    cat: "Restaurant",
+    url: "https://parfumerie-des-princes.siteresto.com", // ← à remplacer par le vrai lien
+    tags: ["Menu complet","Galerie","Mobile","Bouton appel"],
+    live: true
+  },
+  // ── Ajoute tes prochains sites ici ──
+  // {
+  //   name: "Clinique Sainte Marie",
+  //   city: "Abidjan, Côte d'Ivoire",
+  //   cat: "Clinique",
+  //   url: "https://...",
+  //   tags: ["Services","Contact","WhatsApp"],
+  //   live: true
+  // },
+];
+
+function buildPortfolio() {
+  const grid = document.getElementById('portfolioGrid');
+  let html = SITES.map(s => `
+    <a class="portfolio-card reveal" href="${s.url}" target="_blank" rel="noopener">
+      <p class="portfolio-cat">${s.cat}</p>
+      <h3 class="portfolio-name">${s.name}</h3>
+      <p class="portfolio-city">📍 ${s.city}</p>
+      <div class="portfolio-tags">${s.tags.map(t=>`<span class="tag">${t}</span>`).join('')}</div>
+      <div class="portfolio-footer">
+        <span class="portfolio-live">En ligne</span>
+        <span class="portfolio-arrow">↗</span>
+      </div>
+    </a>
+  `).join('');
+  // Carte "à venir"
+  html += `
+    <div class="portfolio-add">
+      <span class="portfolio-add-icon">+</span>
+      <p class="portfolio-add-text">Votre restaurant, clinique ou boutique<br>pourrait être ici.</p>
+    </div>
+  `;
+  grid.innerHTML = html;
+  // Mettre à jour le compteur stats
+  document.getElementById('sNb').textContent = SITES.length;
+  const lbl = document.querySelector('.stats .stat-item:first-child .stat-label');
+  if(lbl) lbl.textContent = SITES.length > 1 ? 'Sites livrés' : 'Site livré';
+  triggerReveal();
+}
+
+/* ── NAV ── */
+let lastY = 0;
+window.addEventListener('scroll', () => {
+  document.getElementById('nav').classList.toggle('scrolled', window.scrollY > 60);
+  triggerReveal();
+  lastY = window.scrollY;
+});
+
+function toggleNav(){ document.getElementById('navLinks').classList.toggle('open'); }
+function closeNav(){ document.getElementById('navLinks').classList.remove('open'); }
+
+/* ── REVEAL ── */
+function triggerReveal(){
+  document.querySelectorAll('.reveal:not(.visible)').forEach(el => {
+    if(el.getBoundingClientRect().top < window.innerHeight - 60) el.classList.add('visible');
+  });
+}
+
+/* ── INIT ── */
+buildPortfolio();
+setTimeout(triggerReveal, 100);
+</script>
 </body>
 </html>
