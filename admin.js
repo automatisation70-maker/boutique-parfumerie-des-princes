@@ -493,38 +493,71 @@ async function callGemini(key, model) {
 
 async function analyzeWithAI() {
   setStep(1, 'loading');
-  const groqKey = getGroqKey();
-  const geminiKey = getGeminiKey();
+
+  // Essai 1 — via n8n (clés sécurisées serveur)
+  try {
+    const res = await fetch('https://n8n-allassane.duckdns.org/webhook/analyze-image', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ image_base64: photoBase64, image_mime: photoMime })
+    });
+    const data = await res.json();
+    if (data.success && data.result) {
+      applyAIResult(data.result);
+      setStep(1, 'done');
+      document.getElementById('prodForm').style.display = 'flex';
+      return;
+    }
+  } catch(e) {
+    console.warn('[IA] n8n inaccessible, bascule sur clés locales');
+  }
+
+  // Essai 2 — fallback clés saisies manuellement (jamais stockées)
+  const groqKey = document.getElementById('pGroq')?.value?.trim();
+  const geminiKey = document.getElementById('pGemini')?.value?.trim();
 
   if (!groqKey && !geminiKey) {
     setStep(1, 'error');
-    showToast('Aucune clé IA configurée — remplissez manuellement', false);
+    showToast('Analyse IA échouée — remplissez manuellement', false);
     document.getElementById('prodForm').style.display = 'flex';
     return;
   }
 
   let text = null;
-  let usedProvider = '';
-
-  // Essai Groq en premier
   if (groqKey) {
     try {
-      text = await callGroq(groqKey, getGroqModel());
-      usedProvider = 'Groq';
-    } catch(e) {
-      console.warn('[IA] Groq échoué:', e.message, '— bascule sur Gemini');
-      showToast('Groq indisponible — bascule sur Gemini…', false);
-    }
+      const res = await fetch('https://api.groq.com/openai/v1/chat/completions', {
+        method: 'POST',
+        headers: { 'Authorization': `Bearer ${groqKey}`, 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          model: getGroqModel(), max_tokens: 400,
+          messages: [{ role: 'user', content: [
+            { type: 'text', text: AI_PROMPT },
+            { type: 'image_url', image_url: { url: `data:${photoMime};base64,${photoBase64}` } }
+          ]}]
+        })
+      });
+      const data = await res.json();
+      if (!data.error) text = data.choices?.[0]?.message?.content;
+    } catch(e) {}
   }
 
-  // Fallback Gemini
   if (!text && geminiKey) {
     try {
-      text = await callGemini(geminiKey, getGeminiModel());
-      usedProvider = 'Gemini';
-    } catch(e) {
-      console.warn('[IA] Gemini échoué:', e.message);
-    }
+      const res = await fetch(`https://generativelanguage.googleapis.com/v1beta/models/${getGeminiModel()}:generateContent?key=${geminiKey}`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          contents: [{ parts: [
+            { text: AI_PROMPT },
+            { inline_data: { mime_type: photoMime, data: photoBase64 } }
+          ]}],
+          generationConfig: { maxOutputTokens: 400 }
+        })
+      });
+      const data = await res.json();
+      if (!data.error) text = data.candidates?.[0]?.content?.parts?.[0]?.text;
+    } catch(e) {}
   }
 
   if (!text) {
@@ -534,6 +567,12 @@ async function analyzeWithAI() {
     return;
   }
 
+  applyAIResult(text);
+  setStep(1, 'done');
+  document.getElementById('prodForm').style.display = 'flex';
+}
+
+function applyAIResult(text) {
   try {
     const parsed = JSON.parse(text.replace(/```json|```/g,'').trim());
     if (parsed.categorie) document.getElementById('fCat').value = parsed.categorie;
@@ -541,15 +580,11 @@ async function analyzeWithAI() {
     if (parsed.description) document.getElementById('fDesc').value = parsed.description;
     if (parsed.groupe) document.getElementById('fGroupe').value = parsed.groupe;
     if (parsed.couleur) document.getElementById('fCouleur').value = parsed.couleur;
-    setStep(1, 'done');
-    showToast(`Analyse IA terminée via ${usedProvider} — vérifiez`);
-  } catch {
-    setStep(1, 'error');
-    showToast('Réponse IA invalide — remplissez manuellement', false);
+  } catch(e) {
+    console.warn('[IA] Parse JSON échoué:', e.message);
   }
-
-  document.getElementById('prodForm').style.display = 'flex';
 }
+
 
 function setStep(n, state) {
   const el = document.getElementById('step' + n);
