@@ -202,18 +202,19 @@ function updateFavs() {
   if (!favs.length) { empty.style.display = 'flex'; grid.innerHTML = ''; return; }
   empty.style.display = 'none';
   const favList = [...favs];
-  grid.innerHTML = favList.map(p => `
-    <div class="prod-card" onclick="openModal('${p.id}', favList)">
-      <div class="prod-img">${prodImgHtml(p)}${p.badge ? `<div class="prod-badge">${p.badge}</div>` : ''}</div>
-      <div class="prod-info">
-        <div class="prod-cat">${p.cat}</div>
-        <div class="prod-name">${p.name}</div>
-        <div class="prod-row">
-          <div class="prod-price">${fmt(p.price)} <span>FCFA</span></div>
-          <button class="prod-add" onclick="addToCart(event,'${p.id}')">+</button>
+  window._favProductList = favList;
+    grid.innerHTML = favList.map(p => `
+      <div class="prod-card" onclick="openModal('${p.id}', window._favProductList)">
+        <div class="prod-img">${prodImgHtml(p)}${p.badge ? `<div class="prod-badge">${p.badge}</div>` : ''}</div>
+        <div class="prod-info">
+          <div class="prod-cat">${p.cat}</div>
+          <div class="prod-name">${p.name}</div>
+          <div class="prod-row">
+            <div class="prod-price">${fmt(p.price)} <span>FCFA</span></div>
+            <button class="prod-add" onclick="addToCart(event,'${p.id}')">+</button>
+          </div>
         </div>
-      </div>
-    </div>`).join('');
+      </div>`).join('');
 }
 
 // ── Panier ────────────────────────────────────────────────
@@ -386,10 +387,10 @@ function renderVariants(p) {
   }
 
   container.style.display = 'block';
+  currentVariants = variants;
   container.innerHTML = `
     <div class="variants-label">Autres coloris</div>
     <div class="variants-scroll">
-  currentVariants = variants;
       ${variants.map(v => `
         <div class="variant-thumb ${v.id === p.id ? 'active' : ''}" onclick="openModal('${v.id}')" title="${v.couleur || v.name}">
           ${v.image
@@ -426,7 +427,7 @@ function toggleFavModal() {
   localStorage.setItem('pdp_favs', JSON.stringify(favs));
   const isFav = favs.some(f => f.id === currentModalId);
   const btn = document.getElementById('modalFav');
-  btn.textContent = isFav ? '♥' : '♡'; btn.className = 'modal-fav' + (isFav ? ' liked' : '');
+  btn.textContent = isFav ? '♥' : '♡'; btn.className = 'modal-fav-overlay' + (isFav ? ' liked' : '');
   updateFavs();
 }
 
