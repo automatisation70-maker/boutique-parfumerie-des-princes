@@ -35,7 +35,9 @@ async function loadConfig() {
     if (data.success && data.config) {
       // Écrire dans localStorage pour accès synchrone
       Object.entries(data.config).forEach(([k, v]) => {
-        if (v !== '' && v !== undefined) localStorage.setItem(k, v);
+        if (v !== '' && v !== undefined && !SENSITIVE_KEYS.includes(k)) {
+          localStorage.setItem(k, v);
+        }
       });
       console.log('[Config] Chargée depuis Sheet (' + Object.keys(data.config).length + ' clés)');
       return true;
@@ -55,7 +57,7 @@ async function saveConfig(configObj) {
   try {
     // Sauvegarder en local immédiatement
     Object.entries(configObj).forEach(([k, v]) => {
-      if (v !== '') localStorage.setItem(k, v);
+      if (v !== '' && !SENSITIVE_KEYS.includes(k)) localStorage.setItem(k, v);
     });
 
     // Envoyer au Sheet via n8n
@@ -74,7 +76,10 @@ async function saveConfig(configObj) {
 }
 
 // ── Getters pratiques ─────────────────────────────────────
+const SENSITIVE_KEYS = ['pdp_groq_key', 'pdp_gemini_key'];
+
 function cfg(key) {
+  if (SENSITIVE_KEYS.includes(key)) return ''; // jamais depuis localStorage
   return localStorage.getItem(key) || CONFIG_DEFAULTS[key] || '';
 }
 
