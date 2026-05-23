@@ -681,16 +681,13 @@ function resetForm() {
 //  PARAMÈTRES
 // ══════════════════════════════════════════════════════════
 function prefillParams() {
-  // Afficher le numéro sans le préfixe 225
-  const rawWa = cfg('pdp_wa_number').replace(/\D/g, '');
-  document.getElementById('pWa').value = rawWa.startsWith('225') ? rawWa.slice(3) : rawWa;
+  document.getElementById('pWa').value = cfg('pdp_wa_number');
   document.getElementById('pNom').value = cfg('pdp_shop_name');
   document.getElementById('pAddr').value = cfg('pdp_shop_addr');
 }
 
 async function saveParams() {
-  const waRaw = document.getElementById('pWa').value.replace(/\D/g, '');
-  const wa = waRaw ? '225' + waRaw : '';
+  const wa = document.getElementById('pWa').value.trim();
   const nom = document.getElementById('pNom').value.trim();
   const addr = document.getElementById('pAddr').value.trim();
   const config = {};
