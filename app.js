@@ -177,9 +177,9 @@ function renderProducts() {
   }
   // Stocker la liste visible pour le carousel modal
   window._currentProductList = list;
-  window._favProductList = favList;
-    grid.innerHTML = favList.map(p => `
-      <div class="prod-card" onclick="openModal('${p.id}', window._favProductList)">
+  window._favProductList = list;
+    grid.innerHTML = list.map(p => `
+      <div class="prod-card" onclick="openModal('${p.id}', window._currentProductList)">
         <div class="prod-img">${prodImgHtml(p)}${p.badge ? `<div class="prod-badge">${p.badge}</div>` : ''}</div>
         <div class="prod-info">
           <div class="prod-cat">${p.cat}</div>
