@@ -646,7 +646,8 @@ function resetForm() {
 //  PARAMÈTRES
 // ══════════════════════════════════════════════════════════
 function prefillParams() {
-  document.getElementById('pWa').value = cfg('pdp_wa_number');
+  const rawWa = cfg('pdp_wa_number').replace(/\D/g, '');
+  document.getElementById('pWa').value = rawWa.startsWith('225') ? rawWa.slice(3) : rawWa;
   document.getElementById('pNom').value = cfg('pdp_shop_name');
   document.getElementById('pAddr').value = cfg('pdp_shop_addr');
 }
