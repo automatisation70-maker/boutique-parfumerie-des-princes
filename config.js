@@ -18,7 +18,7 @@ const CONFIG_DEFAULTS = {
   pdp_groq_model:     'meta-llama/llama-4-scout-17b-16e-instruct',
   pdp_gemini_model:   'gemini-2.5-flash',
   pdp_sheet_id:       '1Bz4AJLrzY-e49SD8H4grbdquRizt4pHN65xjNJwavEs',
-  pdp_wa_number:      '2250700000000',
+  pdp_wa_number:      '2250557591488',
   pdp_shop_name:      'Parfumerie des Princes',
   pdp_shop_addr:      'Quartier Kennedy, Feu Rouge, Bouaké',
 };
