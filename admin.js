@@ -653,7 +653,8 @@ function prefillParams() {
 }
 
 async function saveParams() {
-  const wa = document.getElementById('pWa').value.trim();
+  const waRaw = document.getElementById('pWa').value.replace(/\D/g, '');
+  const wa = waRaw ? '225' + waRaw : '';
   const nom = document.getElementById('pNom').value.trim();
   const addr = document.getElementById('pAddr').value.trim();
   const config = {};
