@@ -199,14 +199,7 @@
       <div class="param-section">
         <div class="param-section-title">🏪 Boutique</div>
         <div class="param-field"><label>Nom de la boutique</label><input type="text" id="pNom" placeholder="Parfumerie des Princes" /></div>
-        <div class="param-field">
-          <label>Numéro WhatsApp</label>
-          <div style="display:flex;align-items:center;gap:8px;">
-            <span style="background:var(--surface,#f5f0e8);border:1px solid var(--border,#ddd);border-radius:10px;padding:12px 14px;font-size:15px;color:var(--text,#1a1a2e);white-space:nowrap;font-weight:600;">+225</span>
-            <input type="tel" id="pWa" placeholder="0557591488" inputmode="numeric" style="flex:1;" />
-          </div>
-          <span class="param-hint">Saisissez uniquement les chiffres après +225</span>
-        </div>
+        <div class="param-field"><label>Numéro WhatsApp</label><input type="tel" id="pWa" placeholder="2250700000000" /><span class="param-hint">Format international sans + ni espaces</span></div>
         <div class="param-field"><label>Adresse</label><input type="text" id="pAddr" placeholder="Quartier Kennedy, Feu Rouge, Bouaké" /></div>
         <button class="param-save-btn" onclick="saveParams()">Enregistrer</button>
         <div class="param-ok" id="paramOk" style="display:none">✓ Sauvegardé</div>
